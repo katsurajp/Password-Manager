@@ -23,9 +23,6 @@ namespace Password_Manager {
             if (Regex.Match(password, @"[^a-zA-Z\d\s:]", RegexOptions.ECMAScript).Success)
                 score++;
 
-            if (score == 0)
-                score = 1;
-
             return (PasswordScore)score;
         }
     }
