@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -17,28 +18,46 @@ namespace PasswordManagerGUI {
         private Ribbon _ribbon;
         private ObjectListView _details;
         private string _storeFile;
+        private WindowColorThemes _windowColorTheme = WindowColorThemes.Dark;
 
         private IController _manager;
 
         public MainWindow() {
             InitializeComponent();
+            this.FormBorderStyle = FormBorderStyle.None;
 
-            _storeFile = "D6qA5QN31w.dat";
+            ButtonExit.Location = new Point(this.Width - 30, 5);
+            ButtonMaximize.Location = new Point(ButtonExit.Location.X - 25, 5);
+            ButtonMinimize.Location = new Point(ButtonMaximize.Location.X - 25, 5);
+
+            if (_windowColorTheme == WindowColorThemes.Dark) {
+                this.BackColor = Color.FromArgb(32, 36, 42);
+            }
+
+            _storeFile = Settings.Default.StoreFile;
 
             SetDetailsView();
             SetRibbonBar();
 
             if (!File.Exists(_storeFile)) {
-                CreateNewStoreFileInstance();
-                SavePasswords();
+                if(Settings.Default.StoreFile == null) {
+                    CreateNewStoreFileInstance();
+                    _storeFile = Settings.Default.StoreFile;
+                }
+                else {
+                    StoreFileNotFoundDialog dialog = new StoreFileNotFoundDialog();
+                    DialogResult result = dialog.ShowDialog();
+                    if (result == DialogResult.Yes)
+                        CreateNewStoreFileInstance();
+                    else if (result == DialogResult.No)
+                        OpenFileDialog();
+                    else
+                        Exit();
+                }
             }
             else {
                 LoadSavedPasswords();
             }
-
-            ICollection<CredentialGroup> groups = _manager.GetGroups();
-
-            BindGroups(groups);
 
             _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
         }
@@ -59,7 +78,7 @@ namespace PasswordManagerGUI {
         }
 
         private void CreateNewStoreFileInstance() {
-            CreateStoreFile newStoreFileDialog = new CreateStoreFile();
+            SetStoreFile newStoreFileDialog = new SetStoreFile();
             DialogResult result = newStoreFileDialog.ShowDialog();
 
             if(result == DialogResult.OK) {
@@ -67,8 +86,7 @@ namespace PasswordManagerGUI {
                 CreatePasswordManagerInstance(key, iv);
             }
             else {
-                Close();
-                Environment.Exit(1);
+                Exit();
             }
         }
 
@@ -84,6 +102,8 @@ namespace PasswordManagerGUI {
                         GetAESKeyAndIV(prompt.Input, out byte[] key, out byte[] iv);
                         CreatePasswordManagerInstance(key, iv);
                         _manager.Load();
+                        ICollection<CredentialGroup> groups = _manager.GetGroups();
+                        BindGroups(groups);
 
                         success = true;
                     }
@@ -93,8 +113,7 @@ namespace PasswordManagerGUI {
                     }
                 }
                 else {
-                    Environment.Exit(1);
-                    Close();
+                    Exit();
                 }
             }
         }
@@ -163,9 +182,9 @@ namespace PasswordManagerGUI {
             CredentialsEditor editor;
 
             if (credential != null)
-                editor = new CredentialsEditor(_manager, credential);
+                editor = new CredentialsEditor(_manager, credential, _windowColorTheme);
             else
-                editor = new CredentialsEditor(_manager, group);
+                editor = new CredentialsEditor(_manager, group, _windowColorTheme);
 
             DialogResult result = editor.ShowDialog();
 
@@ -265,6 +284,7 @@ namespace PasswordManagerGUI {
         }
 
         private void BindDetails(CredentialGroup group) {
+            _details.SelectedItem = null;
             _details.Objects = null;
 
             if(group != null) {
@@ -346,10 +366,9 @@ namespace PasswordManagerGUI {
         }
 
         private void SetDetailsView() {
-            splitContainer1.BackColor = Color.FromArgb(32, 36, 42);
-            Groups.BackColor = Color.FromArgb(255, 254, 255);
-
             _details = new ObjectListView();
+            _details.BorderStyle = BorderStyle.None;
+            
             _details.UseHyperlinks = true;
             _details.ItemActivate += _details_ItemActivate;
             DetailsContainer.Controls.Add(_details);
@@ -358,10 +377,6 @@ namespace PasswordManagerGUI {
             _details.FullRowSelect = true;
             _details.ShowGroups = false;
             _details.UseCustomSelectionColors = true;
-            _details.SelectedBackColor = Color.FromArgb(53, 152, 255);
-            _details.SelectedForeColor = Color.White;
-            _details.UseAlternatingBackColors = true;
-            _details.AlternateRowBackColor = Color.FromArgb(246, 246, 246);
 
             _details.AllColumns.Add(new OLVColumn("Name", "Name"));
             OLVColumn urlColumn = new OLVColumn("URL", "URL");
@@ -369,7 +384,13 @@ namespace PasswordManagerGUI {
             _details.AllColumns.Add(urlColumn);
             _details.AllColumns.Add(new OLVColumn("Username", "Username"));
             _details.AllColumns.Add(new OLVColumn("Password", "Password") { AspectToStringConverter = delegate (object value) { return "****"; } });
-            _details.AllColumns.Add(new OLVColumn("Notes", "Notes"));
+            _details.AllColumns.Add(new OLVColumn("Notes", "Notes") { AspectToStringConverter = delegate(object value) {
+                string notes = Convert.ToString(value);
+                if (notes.Length < 25)
+                    return notes;
+                else
+                    return notes.Substring(0, 22) + "...";
+            }});
             OLVColumn idColumn = new OLVColumn("ID", "ID");
             idColumn.IsVisible = false;
             _details.AllColumns.Add(idColumn);
@@ -378,15 +399,111 @@ namespace PasswordManagerGUI {
 
             _details.HeaderMinimumHeight = 32;
             _details.RebuildColumns();
+
+            if(_windowColorTheme == WindowColorThemes.Default) {
+                splitContainer1.BackColor = Color.FromArgb(104, 104, 103);
+                Groups.BackColor = Color.FromArgb(255, 254, 255);
+                _details.UseAlternatingBackColors = true;
+                _details.AlternateRowBackColor = Color.FromArgb(246, 246, 246);
+                _details.SelectedBackColor = Color.FromArgb(53, 152, 255);
+                _details.SelectedForeColor = Color.White;
+            }
+            if(_windowColorTheme == WindowColorThemes.Dark) {
+                splitContainer1.BackColor = Color.FromArgb(32, 36, 42);
+                _details.HeaderFormatStyle = new HeaderFormatStyle();
+                _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(52, 51, 54);
+                _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(64, 63, 69);
+                _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
+                _details.BackColor = Color.FromArgb(30, 30, 30);
+                _details.ForeColor = Color.LightGray;
+                _details.SelectedBackColor = Color.FromArgb(0, 122, 226);
+                _details.SelectedForeColor = Color.White;
+                _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(255, 107, 31);
+                _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
+                _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
+                DetailsContainer.BackColor = _details.BackColor;
+            }
         }
 
         private void SetRibbonBar() {
+            this.MouseDown += MainWindow_MouseDown;
+            ContentContainer.MouseDown += MainWindow_MouseDown;
+
             _ribbon = new Ribbon();
             _ribbon.Dock = DockStyle.Fill;
             _ribbon.OrbVisible = false;
+            _ribbon.CaptionBarVisible = false;
 
-            RibbonTab tab = new RibbonTab("Funktionen");
-            RibbonPanel panel = new RibbonPanel("");
+            ButtonMinimize.FlatStyle = FlatStyle.Flat;
+            ButtonMinimize.FlatAppearance.BorderSize = 0;
+            ButtonMaximize.FlatStyle = ButtonMinimize.FlatStyle;
+            ButtonMaximize.FlatAppearance.BorderSize = ButtonMinimize.FlatAppearance.BorderSize;
+            ButtonExit.FlatStyle = ButtonMinimize.FlatStyle;
+            ButtonExit.FlatAppearance.BorderSize = ButtonMinimize.FlatAppearance.BorderSize;
+
+            Groups.DrawMode = DrawMode.OwnerDrawFixed;
+
+            if (_windowColorTheme == WindowColorThemes.Default) {
+                ContentContainer.BackColor = Color.FromArgb(187, 208, 233);
+                MenuBar.ForeColor = Color.FromArgb(0, 0, 0);
+                ButtonMinimize.ForeColor = Color.Black;
+
+                Groups.DrawItem += Groups_DrawItemDefaultColorTheme;
+            }
+            else if (_windowColorTheme == WindowColorThemes.Dark) {
+                ContentContainer.BackColor = Color.FromArgb(46, 45, 48);
+                ButtonMinimize.ForeColor = Color.LightGray;
+
+                RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
+
+                Application.EnableVisualStyles();
+                MenuBar.Renderer = new ToolStripProfessionalRenderer(new DarkSchemeMenuStripColorTable());
+                MenuBar.ForeColor = Color.LightGray;
+                foreach(var item in MenuBar.Items) {
+                    var dropDown = (ToolStripMenuItem)item;
+                    foreach(var dropDownItem in dropDown.DropDownItems) {
+                        if (dropDownItem.GetType() == typeof(ToolStripMenuItem))
+                            ((ToolStripMenuItem)dropDownItem).ForeColor = Color.LightGray;
+                    }
+                }
+
+                Groups.BackColor = Color.FromArgb(37, 37, 38);
+                Groups.ForeColor = Color.LightGray;
+
+                Groups.DrawItem += Groups_DrawItemDarkColorTheme;
+
+                foreach (FieldInfo field in colors.GetType().GetFields()) {
+                    var type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
+                    if (type == typeof(Color)) {
+                        if (field.Name.ToLower().Contains("buttonchecked") || field.Name.ToLower().Contains("buttonselected"))
+                            field.SetValue(colors, Color.FromArgb(62, 62, 63));
+                        else if (field.Name.ToLower().Contains("text") && !field.Name.ToLower().Contains("textbackground"))
+                            field.SetValue(colors, Color.LightGray);
+                        else if (field.Name.ToLower().Contains("paneltextbackground"))
+                            field.SetValue(colors, Color.FromArgb(52, 51, 54));
+                        else
+                            field.SetValue(colors, Color.FromArgb(46, 45, 48));
+                    }
+                }
+
+                //colors.PanelDarkBorder = Color.FromArgb(52, 51, 54);
+
+                _ribbon.Theme.RendererColorTable = colors;
+            }
+
+            ButtonMinimize.BackColor = ContentContainer.BackColor;
+
+            ButtonMaximize.BackColor = ButtonMinimize.BackColor;
+            ButtonExit.BackColor = ButtonMinimize.BackColor;
+            ButtonMaximize.ForeColor = ButtonMinimize.ForeColor;
+            ButtonExit.ForeColor = ButtonMinimize.ForeColor;
+
+            MenuBar.BackColor = ContentContainer.BackColor;
+
+            RibbonContainer.Height = 100;
+
+            RibbonTab tab = new RibbonTab();
+            RibbonPanel panel = new RibbonPanel("Funktionen");
             panel.Name = "Functions";
             RibbonItem save = new RibbonButton("Speichern");
             save.ToolTip = "Speichern (Strg + s)";
@@ -463,6 +580,54 @@ namespace PasswordManagerGUI {
             RibbonContainer.Controls.Add(_ribbon);
         }
 
+        private void Groups_DrawItemDarkColorTheme(object sender, DrawItemEventArgs e) {
+            Color itemBgColor = Color.FromArgb(37, 37, 37);
+            Color selectedItemBgColor = Color.FromArgb(0, 122, 226);
+            Color textColor = Color.LightGray;
+            Color seletedItemTextColor = Color.LightGray;
+
+            DrawGroups(sender, e, itemBgColor, selectedItemBgColor, textColor, seletedItemTextColor);
+        }
+
+        private void Groups_DrawItemDefaultColorTheme(object sender, DrawItemEventArgs e) {
+            Color itemBgColor = Color.White;
+            Color selectedItemBgColor = Color.FromArgb(0, 122, 226);
+            Color textColor = Color.Black;
+            Color seletedItemTextColor = Color.White;
+
+            DrawGroups(sender, e, itemBgColor, selectedItemBgColor, textColor, seletedItemTextColor);
+        }
+
+        private void DrawGroups(object sender, DrawItemEventArgs e, Color itemBgColor, Color selectedItemBgColor, Color textColor, Color seletedItemTextColor) {
+            e.DrawBackground();
+
+            bool isItemSelected = ((e.State & DrawItemState.Selected) == DrawItemState.Selected);
+            int itemIndex = e.Index;
+
+            if (itemIndex >= 0 && itemIndex < ((ListBox)sender).Items.Count) {
+                Graphics g = e.Graphics;
+
+                SolidBrush backgroundColorBrush = new SolidBrush((isItemSelected) ? selectedItemBgColor : itemBgColor);
+                g.FillRectangle(backgroundColorBrush, e.Bounds);
+
+                string itemText = ((ListBox)sender).Items[itemIndex].ToString();
+
+                SolidBrush itemTextColorBrush = (isItemSelected) ? new SolidBrush(seletedItemTextColor) : new SolidBrush(textColor);
+                g.DrawString(
+                    itemText,
+                    e.Font,
+                    itemTextColorBrush, new PointF(
+                        ((ListBox)sender).GetItemRectangle(itemIndex).Location.X + 5,
+                        ((ListBox)sender).GetItemRectangle(itemIndex).Location.Y
+                    )
+                );
+                backgroundColorBrush.Dispose();
+                itemTextColorBrush.Dispose();
+            }
+
+            e.DrawFocusRectangle();
+        }
+
         private void Login_Click(object sender, EventArgs e) {
             Credential credential = GetSelectedCredential();
             if (credential != null && !string.IsNullOrEmpty(credential.Username) && !string.IsNullOrEmpty(credential.Password)) {
@@ -515,6 +680,138 @@ namespace PasswordManagerGUI {
                     RemoveSelectedGroup();
                 e.SuppressKeyPress = true;
             }
+        }
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private DateTime lastClick = DateTime.Now;
+
+        private void MainWindow_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+            if (DateTime.Now.Subtract(lastClick).TotalMilliseconds < 200)
+                ChangeWindowState();
+            lastClick = DateTime.Now;
+            if (e.Button == MouseButtons.Left) {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void ChangeWindowState() {
+            if (this.WindowState == FormWindowState.Maximized)
+                this.WindowState = FormWindowState.Normal;
+            else
+                this.WindowState = FormWindowState.Maximized;
+        }
+
+        private void ButtonMinimize_Click(object sender, EventArgs e) {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void ButtonMaximize_Click(object sender, EventArgs e) {
+            ChangeWindowState();
+        }
+
+        private void ButtonExit_Click(object sender, EventArgs e) {
+            Exit();
+        }
+
+        private void Exit() {
+            Close();
+            Environment.Exit(1);
+        }
+
+        protected override void WndProc(ref Message m) {
+            const int RESIZE_HANDLE_SIZE = 10;
+
+            switch (m.Msg) {
+                case 0x0084:
+                    base.WndProc(ref m);
+
+                    if ((int)m.Result == 0x01) {
+                        Point screenPoint = new Point(m.LParam.ToInt32());
+                        Point clientPoint = this.PointToClient(screenPoint);
+                        if (clientPoint.Y <= RESIZE_HANDLE_SIZE) {
+                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
+                                m.Result = (IntPtr)13;
+                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
+                                m.Result = (IntPtr)12;
+                            else
+                                m.Result = (IntPtr)14;
+                        }
+                        else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE)) {
+                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
+                                m.Result = (IntPtr)10;
+                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
+                                m.Result = (IntPtr)2;
+                            else
+                                m.Result = (IntPtr)11;
+                        }
+                        else {
+                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
+                                m.Result = (IntPtr)16;
+                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
+                                m.Result = (IntPtr)15;
+                            else
+                                m.Result = (IntPtr)17;
+                        }
+                    }
+                    return;
+            }
+            base.WndProc(ref m);
+        }
+
+        protected override CreateParams CreateParams {
+            get {
+                CreateParams cp = base.CreateParams;
+                cp.Style |= 0x20000;
+                return cp;
+            }
+        }
+
+        private void MainWindow_SizeChanged(object sender, EventArgs e) {
+            ButtonExit.Location = new Point(this.Width - 30, 5);
+            ButtonMaximize.Location = new Point(ButtonExit.Location.X - 25, 5);
+            ButtonMinimize.Location = new Point(ButtonMaximize.Location.X - 25, 5);
+        }
+
+        private void MenuOpen_Click(object sender, EventArgs e) {
+            OpenFileDialog();
+        }
+
+        private void OpenFileDialog() {
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            DialogResult result = openFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK) {
+                _storeFile = openFileDialog.FileName;
+                LoadSavedPasswords();
+            }
+        }
+
+        private void MenuSave_Click(object sender, EventArgs e) {
+            SavePasswords();
+        }
+
+        private void MenuSaveAs_Click(object sender, EventArgs e) {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog()) {
+                DialogResult result = saveFileDialog.ShowDialog();
+
+                if (result == DialogResult.OK) {
+                    _manager.ChangeStoreFile(saveFileDialog.FileName);
+                    SavePasswords();
+                }
+            }
+        }
+
+        private void MenuExit_Click(object sender, EventArgs e) {
+            Exit();
         }
     }
 }

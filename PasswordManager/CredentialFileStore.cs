@@ -7,7 +7,7 @@ using System.Linq;
 namespace Password_Manager {
     public class CredentialFileStore : ICredentialsStore<ICollection<CredentialGroup>> {
         private readonly ICollection<ICrypt> _crypter;
-        private readonly string _storeFile;
+        private string _storeFile;
 
         public CredentialFileStore(string storeFile, ICrypt crypter) {
             _storeFile = storeFile;
@@ -46,6 +46,10 @@ namespace Password_Manager {
                 encrypted = c.Encrypt(encrypted);
             });
             File.WriteAllText(_storeFile, encrypted);
+        }
+
+        public void SetStoreFile(string absolutePath) {
+            _storeFile = absolutePath;
         }
     }
 }

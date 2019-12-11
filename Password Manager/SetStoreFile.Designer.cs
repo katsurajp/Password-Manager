@@ -1,5 +1,5 @@
 ﻿namespace PasswordManagerGUI {
-    partial class CreateStoreFile {
+    partial class SetStoreFile {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateStoreFile));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetStoreFile));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -34,6 +34,9 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.ButtonOk = new System.Windows.Forms.Button();
             this.BtnShowPassword = new System.Windows.Forms.Button();
+            this.InputStoreFile = new System.Windows.Forms.TextBox();
+            this.ButtonBrowse = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -134,12 +137,42 @@
             this.BtnShowPassword.UseVisualStyleBackColor = true;
             this.BtnShowPassword.Click += new System.EventHandler(this.BtnShowPassword_Click);
             // 
+            // InputStoreFile
+            // 
+            this.InputStoreFile.Location = new System.Drawing.Point(169, 174);
+            this.InputStoreFile.Name = "InputStoreFile";
+            this.InputStoreFile.Size = new System.Drawing.Size(263, 20);
+            this.InputStoreFile.TabIndex = 5;
+            // 
+            // ButtonBrowse
+            // 
+            this.ButtonBrowse.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ButtonBrowse.Location = new System.Drawing.Point(438, 173);
+            this.ButtonBrowse.Name = "ButtonBrowse";
+            this.ButtonBrowse.Size = new System.Drawing.Size(100, 23);
+            this.ButtonBrowse.TabIndex = 6;
+            this.ButtonBrowse.Text = "Durchsuchen...";
+            this.ButtonBrowse.UseVisualStyleBackColor = true;
+            this.ButtonBrowse.Click += new System.EventHandler(this.ButtonBrowse_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(15, 178);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(110, 13);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "Speicherort der Datei:";
+            // 
             // CreateStoreFile
             // 
             this.AcceptButton = this.ButtonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(742, 274);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.ButtonBrowse);
+            this.Controls.Add(this.InputStoreFile);
             this.Controls.Add(this.BtnShowPassword);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.ButtonOk);
@@ -173,5 +206,8 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button ButtonOk;
         private System.Windows.Forms.Button BtnShowPassword;
+        private System.Windows.Forms.TextBox InputStoreFile;
+        private System.Windows.Forms.Button ButtonBrowse;
+        private System.Windows.Forms.Label label6;
     }
 }

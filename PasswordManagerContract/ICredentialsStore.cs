@@ -3,5 +3,7 @@
         T Load();
 
         void Save(T data);
+
+        void SetStoreFile(string absolutePath);
     }
 }

@@ -31,5 +31,7 @@ namespace Password_Manager.Contract {
         void Load();
 
         void Save();
+
+        void ChangeStoreFile(string absolutePath);
     }
 }

@@ -94,5 +94,17 @@ namespace PasswordManagerGUI.Properties {
                 this["PasswordLength"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StoreFile {
+            get {
+                return ((string)(this["StoreFile"]));
+            }
+            set {
+                this["StoreFile"] = value;
+            }
+        }
     }
 }

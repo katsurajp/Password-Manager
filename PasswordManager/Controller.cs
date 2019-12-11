@@ -147,6 +147,10 @@ namespace Password_Manager {
             _store.Save(_currentData);
         }
 
+        public void ChangeStoreFile(string absolutePath) {
+            _store.SetStoreFile(absolutePath);
+        }
+
         private object ExecuteCommand(ICommand command) {
             object returnValue = CommandProcessor.Execute(command);
             OnCommandExecuted?.Invoke(this, null);
