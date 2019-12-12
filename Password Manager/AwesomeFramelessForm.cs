@@ -126,17 +126,20 @@ namespace PasswordManagerGUI {
                     }
                     else if (control.GetType() == typeof(TextBox)) {
                         control.BackColor = Color.FromArgb(52, 51, 54);
-                        ((TextBox)control).BorderStyle = BorderStyle.None;
+                        ((TextBox)control).BorderStyle = BorderStyle.FixedSingle;
                         ((TextBox)control).Font = new Font("Verdana", 9);
                         ((TextBox)control).ForeColor = Color.LightGray;
                     }
                     else if (control.GetType() == typeof(Button)) {
                         ((Button)control).FlatStyle = FlatStyle.Flat;
-                        if (this.AcceptButton == (Button)control)
+                        if (this.AcceptButton == (Button)control) {
                             control.BackColor = Color.FromArgb(255, 107, 31);
-                        else
-                            ((Button)control).BackColor = Color.LightGray;
-                        ((Button)control).ForeColor = Color.FromArgb(40, 40, 40);
+                            ((Button)control).ForeColor = Color.FromArgb(10, 10, 10);
+                        }
+                        else {
+                            ((Button)control).BackColor = Color.FromArgb(51, 51, 51);
+                            ((Button)control).ForeColor = Color.FromArgb(140, 140, 140);
+                        }
                     }
                     else if(control.GetType() == typeof(NumericUpDown)) {
                         control.BackColor = Color.FromArgb(52, 51, 54);

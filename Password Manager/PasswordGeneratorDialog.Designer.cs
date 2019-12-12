@@ -41,7 +41,7 @@
             // 
             // PasswordLength
             // 
-            this.PasswordLength.Location = new System.Drawing.Point(140, 29);
+            this.PasswordLength.Location = new System.Drawing.Point(128, 29);
             this.PasswordLength.Minimum = new decimal(new int[] {
             1,
             0,
@@ -59,7 +59,7 @@
             // CheckUpperCaseLetters
             // 
             this.CheckUpperCaseLetters.AutoSize = true;
-            this.CheckUpperCaseLetters.Location = new System.Drawing.Point(37, 83);
+            this.CheckUpperCaseLetters.Location = new System.Drawing.Point(25, 83);
             this.CheckUpperCaseLetters.Name = "CheckUpperCaseLetters";
             this.CheckUpperCaseLetters.Size = new System.Drawing.Size(105, 17);
             this.CheckUpperCaseLetters.TabIndex = 2;
@@ -69,7 +69,7 @@
             // CheckLowerCaseLetters
             // 
             this.CheckLowerCaseLetters.AutoSize = true;
-            this.CheckLowerCaseLetters.Location = new System.Drawing.Point(37, 60);
+            this.CheckLowerCaseLetters.Location = new System.Drawing.Point(25, 60);
             this.CheckLowerCaseLetters.Name = "CheckLowerCaseLetters";
             this.CheckLowerCaseLetters.Size = new System.Drawing.Size(105, 17);
             this.CheckLowerCaseLetters.TabIndex = 3;
@@ -79,7 +79,7 @@
             // CheckDigits
             // 
             this.CheckDigits.AutoSize = true;
-            this.CheckDigits.Location = new System.Drawing.Point(37, 106);
+            this.CheckDigits.Location = new System.Drawing.Point(25, 106);
             this.CheckDigits.Name = "CheckDigits";
             this.CheckDigits.Size = new System.Drawing.Size(59, 17);
             this.CheckDigits.TabIndex = 4;
@@ -89,7 +89,7 @@
             // CheckSpecialCharacters
             // 
             this.CheckSpecialCharacters.AutoSize = true;
-            this.CheckSpecialCharacters.Location = new System.Drawing.Point(37, 130);
+            this.CheckSpecialCharacters.Location = new System.Drawing.Point(25, 130);
             this.CheckSpecialCharacters.Name = "CheckSpecialCharacters";
             this.CheckSpecialCharacters.Size = new System.Drawing.Size(100, 17);
             this.CheckSpecialCharacters.TabIndex = 5;
@@ -99,14 +99,14 @@
             // 
             // InputSpecialCharacters
             // 
-            this.InputSpecialCharacters.Location = new System.Drawing.Point(140, 128);
+            this.InputSpecialCharacters.Location = new System.Drawing.Point(128, 128);
             this.InputSpecialCharacters.Name = "InputSpecialCharacters";
             this.InputSpecialCharacters.Size = new System.Drawing.Size(172, 20);
             this.InputSpecialCharacters.TabIndex = 6;
             // 
             // InputPassword
             // 
-            this.InputPassword.Location = new System.Drawing.Point(93, 250);
+            this.InputPassword.Location = new System.Drawing.Point(81, 250);
             this.InputPassword.Name = "InputPassword";
             this.InputPassword.Size = new System.Drawing.Size(188, 20);
             this.InputPassword.TabIndex = 7;
@@ -114,7 +114,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 253);
+            this.label1.Location = new System.Drawing.Point(22, 253);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 8;
@@ -122,7 +122,7 @@
             // 
             // ButtonGenerate
             // 
-            this.ButtonGenerate.Location = new System.Drawing.Point(287, 248);
+            this.ButtonGenerate.Location = new System.Drawing.Point(275, 248);
             this.ButtonGenerate.Name = "ButtonGenerate";
             this.ButtonGenerate.Size = new System.Drawing.Size(75, 23);
             this.ButtonGenerate.TabIndex = 9;
@@ -132,7 +132,7 @@
             // 
             // ButtonOk
             // 
-            this.ButtonOk.Location = new System.Drawing.Point(206, 323);
+            this.ButtonOk.Location = new System.Drawing.Point(194, 323);
             this.ButtonOk.Name = "ButtonOk";
             this.ButtonOk.Size = new System.Drawing.Size(75, 23);
             this.ButtonOk.TabIndex = 10;
@@ -142,7 +142,7 @@
             // 
             // ButtonCancel
             // 
-            this.ButtonCancel.Location = new System.Drawing.Point(287, 323);
+            this.ButtonCancel.Location = new System.Drawing.Point(275, 323);
             this.ButtonCancel.Name = "ButtonCancel";
             this.ButtonCancel.Size = new System.Drawing.Size(75, 23);
             this.ButtonCancel.TabIndex = 11;
@@ -153,7 +153,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 31);
+            this.label2.Location = new System.Drawing.Point(22, 31);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 13);
             this.label2.TabIndex = 12;
@@ -161,9 +161,9 @@
             // 
             // PasswordGeneratorDialog
             // 
+            this.AcceptButton = this.ButtonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 375);
             this.ContentContainer.Controls.Add(this.label2);
             this.ContentContainer.Controls.Add(this.ButtonCancel);
             this.ContentContainer.Controls.Add(this.ButtonOk);
@@ -176,8 +176,7 @@
             this.ContentContainer.Controls.Add(this.CheckLowerCaseLetters);
             this.ContentContainer.Controls.Add(this.CheckUpperCaseLetters);
             this.ContentContainer.Controls.Add(this.PasswordLength);
-            this.Controls.Add(ContentContainer);
-            this.AcceptButton = this.ButtonOk;
+            this.ClientSize = new System.Drawing.Size(383, 375);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -187,7 +186,6 @@
             this.Text = "Password Generator";
             ((System.ComponentModel.ISupportInitialize)(this.PasswordLength)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
