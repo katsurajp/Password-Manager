@@ -5,11 +5,12 @@ using System.Reflection;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class SetStoreFile : Form {
+    public partial class SetStoreFile : AwesomeFramelessForm {
         public string Input { get; set; }
 
         public SetStoreFile() {
             InitializeComponent();
+            DoMagic();
             TbMasterPassword.Select();
 
             InputStoreFile.Text = $"{new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName}\\D6qA5QN31w.dat";

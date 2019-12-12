@@ -5,11 +5,12 @@ using System;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class PasswordGeneratorDialog : Form {
+    public partial class PasswordGeneratorDialog : AwesomeFramelessForm {
         public string Password { get; set; }
 
         public PasswordGeneratorDialog() {
             InitializeComponent();
+            DoMagic();
 
             PasswordLength.Value = Settings.Default.PasswordLength;
             InputSpecialCharacters.Text = Settings.Default.SpecialCharacters;

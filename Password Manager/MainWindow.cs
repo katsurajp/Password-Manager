@@ -14,23 +14,24 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class MainWindow : Form {
+    public partial class MainWindow : AwesomeFramelessForm {
         private Ribbon _ribbon;
         private ObjectListView _details;
         private string _storeFile;
-        private WindowColorThemes _windowColorTheme = WindowColorThemes.Dark;
 
         private IController _manager;
 
-        public MainWindow() {
+        public MainWindow() : base() {
+            ColorScheme = WindowColorThemes.Dark;
+
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
+            CanMaximize = true;
+            HasBorder = false;
+            DoMagic();
+            CenterToScreen();
+            this.FormClosed += MainWindow_FormClosed;
 
-            ButtonExit.Location = new Point(this.Width - 30, 5);
-            ButtonMaximize.Location = new Point(ButtonExit.Location.X - 25, 5);
-            ButtonMinimize.Location = new Point(ButtonMaximize.Location.X - 25, 5);
-
-            if (_windowColorTheme == WindowColorThemes.Dark) {
+            if (ColorScheme == WindowColorThemes.Dark) {
                 this.BackColor = Color.FromArgb(32, 36, 42);
             }
 
@@ -40,7 +41,7 @@ namespace PasswordManagerGUI {
             SetRibbonBar();
 
             if (!File.Exists(_storeFile)) {
-                if(Settings.Default.StoreFile == null) {
+                if(string.IsNullOrEmpty(Settings.Default.StoreFile)) {
                     CreateNewStoreFileInstance();
                     _storeFile = Settings.Default.StoreFile;
                 }
@@ -60,6 +61,10 @@ namespace PasswordManagerGUI {
             }
 
             _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e) {
+            Exit();
         }
 
         private void BindGroups(ICollection<CredentialGroup> groups) {
@@ -182,9 +187,9 @@ namespace PasswordManagerGUI {
             CredentialsEditor editor;
 
             if (credential != null)
-                editor = new CredentialsEditor(_manager, credential, _windowColorTheme);
+                editor = new CredentialsEditor(_manager, credential);
             else
-                editor = new CredentialsEditor(_manager, group, _windowColorTheme);
+                editor = new CredentialsEditor(_manager, group);
 
             DialogResult result = editor.ShowDialog();
 
@@ -400,7 +405,7 @@ namespace PasswordManagerGUI {
             _details.HeaderMinimumHeight = 32;
             _details.RebuildColumns();
 
-            if(_windowColorTheme == WindowColorThemes.Default) {
+            if (ColorScheme == WindowColorThemes.Default) {
                 splitContainer1.BackColor = Color.FromArgb(104, 104, 103);
                 Groups.BackColor = Color.FromArgb(255, 254, 255);
                 _details.UseAlternatingBackColors = true;
@@ -408,7 +413,7 @@ namespace PasswordManagerGUI {
                 _details.SelectedBackColor = Color.FromArgb(53, 152, 255);
                 _details.SelectedForeColor = Color.White;
             }
-            if(_windowColorTheme == WindowColorThemes.Dark) {
+            if(ColorScheme == WindowColorThemes.Dark) {
                 splitContainer1.BackColor = Color.FromArgb(32, 36, 42);
                 _details.HeaderFormatStyle = new HeaderFormatStyle();
                 _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(52, 51, 54);
@@ -426,34 +431,19 @@ namespace PasswordManagerGUI {
         }
 
         private void SetRibbonBar() {
-            this.MouseDown += MainWindow_MouseDown;
-            ContentContainer.MouseDown += MainWindow_MouseDown;
-
             _ribbon = new Ribbon();
             _ribbon.Dock = DockStyle.Fill;
             _ribbon.OrbVisible = false;
             _ribbon.CaptionBarVisible = false;
 
-            ButtonMinimize.FlatStyle = FlatStyle.Flat;
-            ButtonMinimize.FlatAppearance.BorderSize = 0;
-            ButtonMaximize.FlatStyle = ButtonMinimize.FlatStyle;
-            ButtonMaximize.FlatAppearance.BorderSize = ButtonMinimize.FlatAppearance.BorderSize;
-            ButtonExit.FlatStyle = ButtonMinimize.FlatStyle;
-            ButtonExit.FlatAppearance.BorderSize = ButtonMinimize.FlatAppearance.BorderSize;
-
             Groups.DrawMode = DrawMode.OwnerDrawFixed;
 
-            if (_windowColorTheme == WindowColorThemes.Default) {
-                ContentContainer.BackColor = Color.FromArgb(187, 208, 233);
+            if (ColorScheme == WindowColorThemes.Default) {
                 MenuBar.ForeColor = Color.FromArgb(0, 0, 0);
-                ButtonMinimize.ForeColor = Color.Black;
 
                 Groups.DrawItem += Groups_DrawItemDefaultColorTheme;
             }
-            else if (_windowColorTheme == WindowColorThemes.Dark) {
-                ContentContainer.BackColor = Color.FromArgb(46, 45, 48);
-                ButtonMinimize.ForeColor = Color.LightGray;
-
+            else if (ColorScheme == WindowColorThemes.Dark) {
                 RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
 
                 Application.EnableVisualStyles();
@@ -486,17 +476,8 @@ namespace PasswordManagerGUI {
                     }
                 }
 
-                //colors.PanelDarkBorder = Color.FromArgb(52, 51, 54);
-
                 _ribbon.Theme.RendererColorTable = colors;
             }
-
-            ButtonMinimize.BackColor = ContentContainer.BackColor;
-
-            ButtonMaximize.BackColor = ButtonMinimize.BackColor;
-            ButtonExit.BackColor = ButtonMinimize.BackColor;
-            ButtonMaximize.ForeColor = ButtonMinimize.ForeColor;
-            ButtonExit.ForeColor = ButtonMinimize.ForeColor;
 
             MenuBar.BackColor = ContentContainer.BackColor;
 
@@ -682,102 +663,8 @@ namespace PasswordManagerGUI {
             }
         }
 
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        private DateTime lastClick = DateTime.Now;
-
-        private void MainWindow_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (DateTime.Now.Subtract(lastClick).TotalMilliseconds < 200)
-                ChangeWindowState();
-            lastClick = DateTime.Now;
-            if (e.Button == MouseButtons.Left) {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
-        }
-
-        private void ChangeWindowState() {
-            if (this.WindowState == FormWindowState.Maximized)
-                this.WindowState = FormWindowState.Normal;
-            else
-                this.WindowState = FormWindowState.Maximized;
-        }
-
-        private void ButtonMinimize_Click(object sender, EventArgs e) {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void ButtonMaximize_Click(object sender, EventArgs e) {
-            ChangeWindowState();
-        }
-
-        private void ButtonExit_Click(object sender, EventArgs e) {
-            Exit();
-        }
-
         private void Exit() {
-            Close();
             Environment.Exit(1);
-        }
-
-        protected override void WndProc(ref Message m) {
-            const int RESIZE_HANDLE_SIZE = 10;
-
-            switch (m.Msg) {
-                case 0x0084:
-                    base.WndProc(ref m);
-
-                    if ((int)m.Result == 0x01) {
-                        Point screenPoint = new Point(m.LParam.ToInt32());
-                        Point clientPoint = this.PointToClient(screenPoint);
-                        if (clientPoint.Y <= RESIZE_HANDLE_SIZE) {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)13;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)12;
-                            else
-                                m.Result = (IntPtr)14;
-                        }
-                        else if (clientPoint.Y <= (Size.Height - RESIZE_HANDLE_SIZE)) {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)10;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)2;
-                            else
-                                m.Result = (IntPtr)11;
-                        }
-                        else {
-                            if (clientPoint.X <= RESIZE_HANDLE_SIZE)
-                                m.Result = (IntPtr)16;
-                            else if (clientPoint.X < (Size.Width - RESIZE_HANDLE_SIZE))
-                                m.Result = (IntPtr)15;
-                            else
-                                m.Result = (IntPtr)17;
-                        }
-                    }
-                    return;
-            }
-            base.WndProc(ref m);
-        }
-
-        protected override CreateParams CreateParams {
-            get {
-                CreateParams cp = base.CreateParams;
-                cp.Style |= 0x20000;
-                return cp;
-            }
-        }
-
-        private void MainWindow_SizeChanged(object sender, EventArgs e) {
-            ButtonExit.Location = new Point(this.Width - 30, 5);
-            ButtonMaximize.Location = new Point(ButtonExit.Location.X - 25, 5);
-            ButtonMinimize.Location = new Point(ButtonMaximize.Location.X - 25, 5);
         }
 
         private void MenuOpen_Click(object sender, EventArgs e) {
@@ -785,13 +672,14 @@ namespace PasswordManagerGUI {
         }
 
         private void OpenFileDialog() {
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             DialogResult result = openFileDialog.ShowDialog();
 
             if (result == DialogResult.OK) {
                 _storeFile = openFileDialog.FileName;
                 LoadSavedPasswords();
+                Settings.Default.StoreFile = _storeFile;
+                Settings.Default.Save();
             }
         }
 

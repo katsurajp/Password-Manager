@@ -3,7 +3,7 @@ using System;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class EditGroupDialog : Form {
+    public partial class EditGroupDialog : AwesomeFramelessForm {
         private IController _passwordManager;
         private CredentialGroup _group { get; set; }
 
@@ -11,6 +11,7 @@ namespace PasswordManagerGUI {
 
         public EditGroupDialog(IController passwordManager, CredentialGroup group) {
             InitializeComponent();
+            DoMagic();
             _passwordManager = passwordManager;
 
             EditedGroup = group;
@@ -21,6 +22,7 @@ namespace PasswordManagerGUI {
 
         public EditGroupDialog(IController passwordManager) {
             InitializeComponent();
+            DoMagic();
             _passwordManager = passwordManager;
         }
 

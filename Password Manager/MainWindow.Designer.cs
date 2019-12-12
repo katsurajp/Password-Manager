@@ -24,10 +24,6 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.ContentContainer = new System.Windows.Forms.Panel();
-            this.ButtonMinimize = new System.Windows.Forms.Button();
-            this.ButtonMaximize = new System.Windows.Forms.Button();
-            this.ButtonExit = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -45,7 +41,6 @@
             this.MenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.extrasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ContentContainer.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -57,9 +52,6 @@
             // 
             // ContentContainer
             // 
-            this.ContentContainer.Controls.Add(this.ButtonMinimize);
-            this.ContentContainer.Controls.Add(this.ButtonMaximize);
-            this.ContentContainer.Controls.Add(this.ButtonExit);
             this.ContentContainer.Controls.Add(this.panel2);
             this.ContentContainer.Controls.Add(this.RibbonContainer);
             this.ContentContainer.Controls.Add(this.MenuBar);
@@ -69,39 +61,6 @@
             this.ContentContainer.Padding = new System.Windows.Forms.Padding(3, 20, 3, 3);
             this.ContentContainer.Size = new System.Drawing.Size(1150, 681);
             this.ContentContainer.TabIndex = 0;
-            // 
-            // ButtonMinimize
-            // 
-            this.ButtonMinimize.Font = new System.Drawing.Font("UD Digi Kyokasho NK-B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.ButtonMinimize.Location = new System.Drawing.Point(1072, 0);
-            this.ButtonMinimize.Name = "ButtonMinimize";
-            this.ButtonMinimize.Size = new System.Drawing.Size(20, 20);
-            this.ButtonMinimize.TabIndex = 7;
-            this.ButtonMinimize.Text = "-";
-            this.ButtonMinimize.UseVisualStyleBackColor = true;
-            this.ButtonMinimize.Click += new System.EventHandler(this.ButtonMinimize_Click);
-            // 
-            // ButtonMaximize
-            // 
-            this.ButtonMaximize.Font = new System.Drawing.Font("Wingdings", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.ButtonMaximize.Location = new System.Drawing.Point(1098, 0);
-            this.ButtonMaximize.Name = "ButtonMaximize";
-            this.ButtonMaximize.Size = new System.Drawing.Size(20, 20);
-            this.ButtonMaximize.TabIndex = 6;
-            this.ButtonMaximize.Text = "";
-            this.ButtonMaximize.UseVisualStyleBackColor = true;
-            this.ButtonMaximize.Click += new System.EventHandler(this.ButtonMaximize_Click);
-            // 
-            // ButtonExit
-            // 
-            this.ButtonExit.Font = new System.Drawing.Font("UD Digi Kyokasho NK-B", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.ButtonExit.Location = new System.Drawing.Point(1124, 0);
-            this.ButtonExit.Name = "ButtonExit";
-            this.ButtonExit.Size = new System.Drawing.Size(20, 20);
-            this.ButtonExit.TabIndex = 5;
-            this.ButtonExit.Text = "X";
-            this.ButtonExit.UseVisualStyleBackColor = true;
-            this.ButtonExit.Click += new System.EventHandler(this.ButtonExit_Click);
             // 
             // panel2
             // 
@@ -203,38 +162,38 @@
             // MenuOpen
             // 
             this.MenuOpen.Name = "MenuOpen";
-            this.MenuOpen.Size = new System.Drawing.Size(180, 22);
+            this.MenuOpen.Size = new System.Drawing.Size(177, 22);
             this.MenuOpen.Text = "Öffnen";
             this.MenuOpen.Click += new System.EventHandler(this.MenuOpen_Click);
             // 
             // speichernUnterToolStripMenuItem
             // 
             this.speichernUnterToolStripMenuItem.Name = "speichernUnterToolStripMenuItem";
-            this.speichernUnterToolStripMenuItem.Size = new System.Drawing.Size(177, 6);
+            this.speichernUnterToolStripMenuItem.Size = new System.Drawing.Size(174, 6);
             // 
             // MenuSave
             // 
             this.MenuSave.Name = "MenuSave";
-            this.MenuSave.Size = new System.Drawing.Size(180, 22);
+            this.MenuSave.Size = new System.Drawing.Size(177, 22);
             this.MenuSave.Text = "Speichern (Strg + s)";
             this.MenuSave.Click += new System.EventHandler(this.MenuSave_Click);
             // 
             // MenuSaveAs
             // 
             this.MenuSaveAs.Name = "MenuSaveAs";
-            this.MenuSaveAs.Size = new System.Drawing.Size(180, 22);
+            this.MenuSaveAs.Size = new System.Drawing.Size(177, 22);
             this.MenuSaveAs.Text = "Speichern unter...";
             this.MenuSaveAs.Click += new System.EventHandler(this.MenuSaveAs_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(174, 6);
             // 
             // MenuExit
             // 
             this.MenuExit.Name = "MenuExit";
-            this.MenuExit.Size = new System.Drawing.Size(180, 22);
+            this.MenuExit.Size = new System.Drawing.Size(177, 22);
             this.MenuExit.Text = "Beenden";
             this.MenuExit.Click += new System.EventHandler(this.MenuExit_Click);
             // 
@@ -257,7 +216,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1152, 683);
-            this.Controls.Add(this.ContentContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.MenuBar;
@@ -265,10 +223,7 @@
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Password Manager";
-            this.SizeChanged += new System.EventHandler(this.MainWindow_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
-            this.ContentContainer.ResumeLayout(false);
-            this.ContentContainer.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -279,11 +234,13 @@
             this.MenuBar.PerformLayout();
             this.ResumeLayout(false);
 
+            this.CanMaximize = true;
+            this.CanMinimize = true;
+            this.IsMainWindow = true;
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel ContentContainer;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -299,9 +256,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuSaveAs;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem MenuExit;
-        private System.Windows.Forms.Button ButtonMinimize;
-        private System.Windows.Forms.Button ButtonMaximize;
-        private System.Windows.Forms.Button ButtonExit;
         private System.Windows.Forms.ToolStripMenuItem extrasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionenToolStripMenuItem;
     }

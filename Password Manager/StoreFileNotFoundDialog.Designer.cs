@@ -28,6 +28,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ButtonNewFile = new System.Windows.Forms.Button();
             this.ButtonOpen = new System.Windows.Forms.Button();
+            this.lblStoreFileLocation = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -42,7 +43,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 43);
+            this.label2.Location = new System.Drawing.Point(21, 86);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(221, 13);
             this.label2.TabIndex = 1;
@@ -50,7 +51,7 @@
             // 
             // ButtonNewFile
             // 
-            this.ButtonNewFile.Location = new System.Drawing.Point(24, 94);
+            this.ButtonNewFile.Location = new System.Drawing.Point(24, 137);
             this.ButtonNewFile.Name = "ButtonNewFile";
             this.ButtonNewFile.Size = new System.Drawing.Size(153, 23);
             this.ButtonNewFile.TabIndex = 2;
@@ -60,7 +61,7 @@
             // 
             // ButtonOpen
             // 
-            this.ButtonOpen.Location = new System.Drawing.Point(192, 94);
+            this.ButtonOpen.Location = new System.Drawing.Point(192, 137);
             this.ButtonOpen.Name = "ButtonOpen";
             this.ButtonOpen.Size = new System.Drawing.Size(153, 23);
             this.ButtonOpen.TabIndex = 3;
@@ -68,17 +69,28 @@
             this.ButtonOpen.UseVisualStyleBackColor = true;
             this.ButtonOpen.Click += new System.EventHandler(this.ButtonOpen_Click);
             // 
+            // lblStoreFileLocation
+            // 
+            this.lblStoreFileLocation.AutoSize = true;
+            this.lblStoreFileLocation.Location = new System.Drawing.Point(24, 47);
+            this.lblStoreFileLocation.Name = "lblStoreFileLocation";
+            this.lblStoreFileLocation.Size = new System.Drawing.Size(22, 13);
+            this.lblStoreFileLocation.TabIndex = 1;
+            this.lblStoreFileLocation.Text = "C:\\";
+            // 
             // StoreFileNotFoundDialog
             // 
+            this.AcceptButton = this.ButtonOpen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(427, 146);
-            this.Controls.Add(this.ButtonOpen);
-            this.Controls.Add(this.ButtonNewFile);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(597, 195);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.ContentContainer.Controls.Add(this.ButtonOpen);
+            this.ContentContainer.Controls.Add(this.ButtonNewFile);
+            this.ContentContainer.Controls.Add(this.lblStoreFileLocation);
+            this.ContentContainer.Controls.Add(this.label2);
+            this.ContentContainer.Controls.Add(this.label1);
             this.Name = "StoreFileNotFoundDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Passwortdatenbank nicht gefunden :(";
@@ -93,5 +105,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ButtonNewFile;
         private System.Windows.Forms.Button ButtonOpen;
+        private System.Windows.Forms.Label lblStoreFileLocation;
     }
 }

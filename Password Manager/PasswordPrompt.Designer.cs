@@ -33,7 +33,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 24);
+            this.label1.Location = new System.Drawing.Point(14, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 0;
@@ -41,7 +41,7 @@
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(73, 21);
+            this.tbPassword.Location = new System.Drawing.Point(73, 30);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.Size = new System.Drawing.Size(266, 20);
             this.tbPassword.TabIndex = 1;
@@ -75,10 +75,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(364, 106);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.ButtonOk);
-            this.Controls.Add(this.tbPassword);
-            this.Controls.Add(this.label1);
+            this.ContentContainer.Controls.Add(this.btnCancel);
+            this.ContentContainer.Controls.Add(this.ButtonOk);
+            this.ContentContainer.Controls.Add(this.tbPassword);
+            this.ContentContainer.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.MaximizeBox = false;

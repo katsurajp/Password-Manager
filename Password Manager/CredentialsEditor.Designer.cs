@@ -147,6 +147,7 @@
             this.tbNotes.Name = "tbNotes";
             this.tbNotes.Size = new System.Drawing.Size(347, 241);
             this.tbNotes.TabIndex = 10;
+            this.tbNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             // 
             // btnOk
             // 
@@ -214,26 +215,26 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(491, 487);
-            this.Controls.Add(this.ButtonPasswordGenerator);
-            this.Controls.Add(this.StrengthContainer);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.tbNotes);
-            this.Controls.Add(this.Label5);
-            this.Controls.Add(this.tbUrl);
-            this.Controls.Add(this.Label4);
-            this.Controls.Add(this.btnTogglePassword);
-            this.Controls.Add(this.tbPassword);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.tbUsername);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.tbName);
-            this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.ContentContainer.Controls.Add(this.ButtonPasswordGenerator);
+            this.ContentContainer.Controls.Add(this.StrengthContainer);
+            this.ContentContainer.Controls.Add(this.label6);
+            this.ContentContainer.Controls.Add(this.btnCancel);
+            this.ContentContainer.Controls.Add(this.btnOk);
+            this.ContentContainer.Controls.Add(this.tbNotes);
+            this.ContentContainer.Controls.Add(this.Label5);
+            this.ContentContainer.Controls.Add(this.tbUrl);
+            this.ContentContainer.Controls.Add(this.Label4);
+            this.ContentContainer.Controls.Add(this.btnTogglePassword);
+            this.ContentContainer.Controls.Add(this.tbPassword);
+            this.ContentContainer.Controls.Add(this.label3);
+            this.ContentContainer.Controls.Add(this.tbUsername);
+            this.ContentContainer.Controls.Add(this.label2);
+            this.ContentContainer.Controls.Add(this.tbName);
+            this.ContentContainer.Controls.Add(this.label1);
+            this.BorderColor = System.Drawing.Color.FromArgb(67, 67, 67);
+            this.CanMinimize = false;
+            this.CanMaximize = false;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "CredentialsEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Credentials";

@@ -34,7 +34,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 24);
+            this.label1.Location = new System.Drawing.Point(14, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 14);
             this.label1.TabIndex = 0;
@@ -43,7 +43,7 @@
             // tbGroupName
             // 
             this.tbGroupName.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGroupName.Location = new System.Drawing.Point(57, 21);
+            this.tbGroupName.Location = new System.Drawing.Point(57, 38);
             this.tbGroupName.Name = "tbGroupName";
             this.tbGroupName.Size = new System.Drawing.Size(281, 20);
             this.tbGroupName.TabIndex = 1;
@@ -51,7 +51,7 @@
             // ButtonOk
             // 
             this.ButtonOk.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonOk.Location = new System.Drawing.Point(156, 65);
+            this.ButtonOk.Location = new System.Drawing.Point(156, 82);
             this.ButtonOk.Name = "ButtonOk";
             this.ButtonOk.Size = new System.Drawing.Size(75, 23);
             this.ButtonOk.TabIndex = 2;
@@ -62,7 +62,7 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(237, 65);
+            this.btnCancel.Location = new System.Drawing.Point(237, 82);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 23);
             this.btnCancel.TabIndex = 3;
@@ -75,11 +75,11 @@
             this.AcceptButton = this.ButtonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 104);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.ButtonOk);
-            this.Controls.Add(this.tbGroupName);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(364, 125);
+            this.ContentContainer.Controls.Add(this.btnCancel);
+            this.ContentContainer.Controls.Add(this.ButtonOk);
+            this.ContentContainer.Controls.Add(this.tbGroupName);
+            this.ContentContainer.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

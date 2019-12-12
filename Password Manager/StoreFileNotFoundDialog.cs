@@ -1,10 +1,14 @@
-﻿using System;
+﻿using PasswordManagerGUI.Properties;
+using System;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class StoreFileNotFoundDialog : Form {
+    public partial class StoreFileNotFoundDialog : AwesomeFramelessForm {
         public StoreFileNotFoundDialog() {
             InitializeComponent();
+            DoMagic();
+
+            lblStoreFileLocation.Text = Settings.Default.StoreFile;
         }
 
         private void ButtonNewFile_Click(object sender, EventArgs e) {

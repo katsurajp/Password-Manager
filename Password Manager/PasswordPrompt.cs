@@ -2,11 +2,12 @@
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class PasswordPrompt : Form {
+    public partial class PasswordPrompt : AwesomeFramelessForm {
         public string Input { get; set; }
 
         public PasswordPrompt() {
             InitializeComponent();
+            DoMagic();
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e) {

@@ -2,10 +2,11 @@
 using Password_Manager.Contract;
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
-    public partial class CredentialsEditor : Form {
+    public partial class CredentialsEditor : AwesomeFramelessForm {
         private IPasswordAnalyzer _passwordAnalyzer;
         private IController _passwordManager;
         private CredentialGroup _credentialGroup;
@@ -13,21 +14,9 @@ namespace PasswordManagerGUI {
 
         public Credential EditedCredential { get; set; }
 
-        public CredentialsEditor(IController passwordManager, Credential credential, WindowColorThemes theme) {
+        public CredentialsEditor(IController passwordManager, Credential credential) {
             InitializeComponent();
-            if(theme == WindowColorThemes.Dark) {
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.BackColor = Color.FromArgb(40, 40, 40);
-                this.ForeColor = Color.White;
-                btnOk.BackColor = Color.FromArgb(255, 107, 31);
-                foreach(Control control in this.Controls) {
-                    if(control.GetType() == typeof(TextBox)) {
-                        ((TextBox)control).BackColor = Color.FromArgb(64, 64, 63);
-                        ((TextBox)control).ForeColor = Color.White;
-                        ((TextBox)control).BorderStyle = BorderStyle.FixedSingle;
-                    }
-                }
-            }
+            DoMagic();
             Strength.Visible = false;
 
             _passwordAnalyzer = new StandardPasswordAnalyzer();
@@ -43,13 +32,9 @@ namespace PasswordManagerGUI {
             tbNotes.Text = _credential.Notes;
         }
 
-        public CredentialsEditor(IController passwordManager, CredentialGroup credentialGroup, WindowColorThemes theme) {
+        public CredentialsEditor(IController passwordManager, CredentialGroup credentialGroup) {
             InitializeComponent();
-            if (theme == WindowColorThemes.Dark) {
-                this.BackColor = Color.FromArgb(40, 40, 40);
-                this.ForeColor = Color.White;
-                btnOk.BackColor = Color.FromArgb(255, 107, 31);
-            }
+            DoMagic();
             Strength.Visible = false;
 
             _passwordAnalyzer = new StandardPasswordAnalyzer();
