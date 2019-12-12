@@ -147,7 +147,7 @@ namespace PasswordManagerGUI {
                 ButtonMinimize.ForeColor = Color.LightGray;
                 ContentContainer.ForeColor = Color.LightGray;
 
-                BorderColor = Color.LightGray;
+                BorderColor = Color.FromArgb(10, 10, 10);
                 ContentContainer.Update();
             }
 

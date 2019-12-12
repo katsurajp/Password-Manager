@@ -61,6 +61,12 @@ namespace PasswordManagerGUI {
             }
 
             _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
+
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void MainWindow_SizeChanged(object sender, EventArgs e) {
+            _details.AutoResizeColumns();
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e) {
@@ -426,8 +432,10 @@ namespace PasswordManagerGUI {
                 _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(255, 107, 31);
                 _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
                 _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
-                DetailsContainer.BackColor = _details.BackColor;
             }
+
+            DetailsContainer.BackColor = _details.BackColor;
+            panel2.BackColor = _details.BackColor;
         }
 
         private void SetRibbonBar() {
