@@ -30,6 +30,8 @@ namespace PasswordManagerGUI {
             tbUsername.Text = _credential.Username;
             tbPassword.Text = _credential.Password;
             tbNotes.Text = _credential.Notes;
+
+            AcceptButton = null;
         }
 
         public CredentialsEditor(IPasswordSage passwordManager, CredentialGroup credentialGroup) {
@@ -42,6 +44,8 @@ namespace PasswordManagerGUI {
 
             _credential = new Credential();
             _credentialGroup = credentialGroup;
+
+            AcceptButton = null;
         }
 
         private void BtnTogglePassword_Click(object sender, System.EventArgs e) {
