@@ -22,6 +22,8 @@ namespace PasswordManagerGUI {
 
         public static WindowColorSchemes ColorScheme { get; set; }
 
+        public string Title { get; set; }
+
         public AwesomeFramelessForm() {
             ContentContainer = new Panel();
             ContentContainer.Dock = DockStyle.Fill;
@@ -98,7 +100,36 @@ namespace PasswordManagerGUI {
                 Update();
             }
 
+            SetTitle();
             SizeChanged();
+        }
+
+        private void SetTitle() {
+            if (!string.IsNullOrEmpty(Title)) {
+                Panel titlePanel = new Panel();
+                if (ColorScheme == WindowColorSchemes.Light)
+                    titlePanel.BackColor = Color.DarkBlue;
+                else
+                    titlePanel.BackColor = Color.FromArgb(20, 20, 19);
+                Label titleLabel = new Label() {
+                    Text = Title,
+                    Location = new Point(10, 10)
+                };
+                titleLabel.ForeColor = Color.White;
+                titlePanel.Controls.Add(titleLabel);
+                titlePanel.Dock = DockStyle.Top;
+                titlePanel.Height = 35;
+
+                foreach(Control control in ContentContainer.Controls) {
+                    control.Location = new Point(control.Location.X, control.Location.Y + 35);
+                }
+
+                this.Height += 25;
+
+                titlePanel.MouseDown += MainWindow_MouseDown;
+
+                ContentContainer.Controls.Add(titlePanel);
+            }
         }
 
         private void SetStyles() {

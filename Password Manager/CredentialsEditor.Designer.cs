@@ -232,6 +232,7 @@
             this.ContentContainer.Controls.Add(this.tbName);
             this.ContentContainer.Controls.Add(this.label1);
             this.BorderColor = System.Drawing.Color.FromArgb(67, 67, 67);
+            this.Title = "Anmeldeinformationen";
             this.CanMinimize = false;
             this.CanMaximize = false;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -179,6 +179,7 @@
             this.ClientSize = new System.Drawing.Size(383, 375);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Title = "Passwort Generator";
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PasswordGeneratorDialog";
