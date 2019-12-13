@@ -152,6 +152,9 @@ namespace PasswordManagerGUI {
                     control.BackColor = Color.FromArgb(52, 51, 54);
                     ((NumericUpDown)control).ForeColor = Color.LightGray;
                 }
+                else if(control.GetType() == typeof(GroupBox)) {
+                    control.ForeColor = Color.LightGray;
+                }
             }
 
             ButtonMinimize.ForeColor = Color.LightGray;

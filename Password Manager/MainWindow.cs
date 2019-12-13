@@ -22,7 +22,7 @@ namespace PasswordManagerGUI {
         private IController _manager;
 
         public MainWindow() : base() {
-            ColorScheme = WindowColorSchemes.Light;
+            ColorScheme = Settings.Default.ColorScheme;
 
             InitializeComponent();
             CanMaximize = true;
@@ -37,8 +37,7 @@ namespace PasswordManagerGUI {
 
             _storeFile = Settings.Default.StoreFile;
 
-            SetDetailsView();
-            SetRibbonBar();
+            LoadForm();
 
             if (!File.Exists(_storeFile)) {
                 if(string.IsNullOrEmpty(Settings.Default.StoreFile)) {
@@ -60,9 +59,14 @@ namespace PasswordManagerGUI {
                 LoadSavedPasswords();
             }
 
-            _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
-
             this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void LoadForm() {
+            SetDetailsView();
+            SetRibbonBar();
+
+            _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
         }
 
         private void MainWindow_SizeChanged(object sender, EventArgs e) {
@@ -415,7 +419,7 @@ namespace PasswordManagerGUI {
                 splitContainer1.BackColor = Color.FromArgb(239, 238, 239);
                 _details.HeaderFormatStyle = new HeaderFormatStyle();
                 _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(206, 206, 217);
-                _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(64, 63, 69);
+                _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(215, 215, 214);
                 _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
                 _details.BackColor = Color.FromArgb(255, 255, 252);
                 _details.ForeColor = Color.Black;
@@ -729,6 +733,15 @@ namespace PasswordManagerGUI {
 
         private void MenuSave_Click(object sender, EventArgs e) {
             SavePasswords();
+        }
+
+        private void MenuOptions_Click(object sender, EventArgs e) {
+            SettingsDialog settingsDialog = new SettingsDialog();
+            DialogResult result = settingsDialog.ShowDialog();
+
+            if(result == DialogResult.OK) {
+                MessageBox.Show("Änderung wird nach Neustart des Programms wirksam.");
+            }
         }
 
         private void MenuSaveAs_Click(object sender, EventArgs e) {

@@ -106,5 +106,17 @@ namespace PasswordManagerGUI.Properties {
                 this["StoreFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
+        public global::PasswordManagerGUI.WindowColorSchemes ColorScheme {
+            get {
+                return ((global::PasswordManagerGUI.WindowColorSchemes)(this["ColorScheme"]));
+            }
+            set {
+                this["ColorScheme"] = value;
+            }
+        }
     }
 }

@@ -23,5 +23,8 @@
     <Setting Name="StoreFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ColorScheme" Type="PasswordManagerGUI.WindowColorSchemes" Scope="User">
+      <Value Profile="(Default)">Light</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
