@@ -207,9 +207,7 @@ namespace PasswordManagerGUI {
         private void AwesomeFramelessForm_Paint(object sender, PaintEventArgs e) {
             Graphics g = e.Graphics;
             Brush brush = new SolidBrush(BorderColor);
-            //Rectangle rec = ClientRectangle;
             Rectangle rec = new Rectangle(0, 0, Width - 1, Height - 1);
-            //rec.Inflate(-1, -1);
             g.DrawRectangle(new Pen(brush), rec);
         }
 
