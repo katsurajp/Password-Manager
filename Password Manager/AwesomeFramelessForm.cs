@@ -108,17 +108,17 @@ namespace PasswordManagerGUI {
             if (!string.IsNullOrEmpty(Title)) {
                 Panel titlePanel = new Panel();
                 if (ColorScheme == WindowColorSchemes.Light)
-                    titlePanel.BackColor = Color.DarkBlue;
+                    titlePanel.BackColor = Color.FromArgb(0, 122, 226);
                 else
                     titlePanel.BackColor = Color.FromArgb(20, 20, 19);
                 Label titleLabel = new Label() {
                     Text = Title,
-                    Location = new Point(10, 10)
+                    Location = new Point(10, 8)
                 };
                 titleLabel.ForeColor = Color.White;
                 titlePanel.Controls.Add(titleLabel);
                 titlePanel.Dock = DockStyle.Top;
-                titlePanel.Height = 35;
+                titlePanel.Height = 30;
 
                 foreach(Control control in ContentContainer.Controls) {
                     control.Location = new Point(control.Location.X, control.Location.Y + 35);
@@ -197,7 +197,7 @@ namespace PasswordManagerGUI {
 
         private void SetLightColorScheme() {
             ButtonMinimize.ForeColor = Color.Black;
-            BorderColor = Color.DarkBlue;
+            BorderColor = Color.FromArgb(0, 122, 226);
             if (!IsMainWindow)
                 ContentContainer.BackColor = Color.FromArgb(239, 238, 239);
             else
@@ -207,8 +207,9 @@ namespace PasswordManagerGUI {
         private void AwesomeFramelessForm_Paint(object sender, PaintEventArgs e) {
             Graphics g = e.Graphics;
             Brush brush = new SolidBrush(BorderColor);
-            Rectangle rec = ClientRectangle;
-            rec.Inflate(-1, -1);
+            //Rectangle rec = ClientRectangle;
+            Rectangle rec = new Rectangle(0, 0, Width - 1, Height - 1);
+            //rec.Inflate(-1, -1);
             g.DrawRectangle(new Pen(brush), rec);
         }
 
