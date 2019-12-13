@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Password_Manager.Contract {
-    public interface IController {
+    public interface IPasswordSage {
         bool HasUndoableAction { get; }
 
         bool HasRedoableAction { get; }

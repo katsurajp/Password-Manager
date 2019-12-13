@@ -8,13 +8,13 @@ using System.Windows.Forms;
 namespace PasswordManagerGUI {
     public partial class CredentialsEditor : AwesomeFramelessForm {
         private IPasswordAnalyzer _passwordAnalyzer;
-        private IController _passwordManager;
+        private IPasswordSage _passwordManager;
         private CredentialGroup _credentialGroup;
         private Credential _credential;
 
         public Credential EditedCredential { get; set; }
 
-        public CredentialsEditor(IController passwordManager, Credential credential) {
+        public CredentialsEditor(IPasswordSage passwordManager, Credential credential) {
             InitializeComponent();
             DoMagic();
             Strength.Visible = false;
@@ -32,7 +32,7 @@ namespace PasswordManagerGUI {
             tbNotes.Text = _credential.Notes;
         }
 
-        public CredentialsEditor(IController passwordManager, CredentialGroup credentialGroup) {
+        public CredentialsEditor(IPasswordSage passwordManager, CredentialGroup credentialGroup) {
             InitializeComponent();
             DoMagic();
             Strength.Visible = false;

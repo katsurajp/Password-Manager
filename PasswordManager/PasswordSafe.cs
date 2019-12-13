@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Password_Manager {
-    public class Controller : IController {
+    public class PasswordSafe : IPasswordSage {
         private List<CredentialGroup> _currentData;
 
         private readonly ICredentialsStore<ICollection<CredentialGroup>> _store;
@@ -16,7 +16,7 @@ namespace Password_Manager {
 
         public event EventHandler OnCommandExecuted;
 
-        public Controller(ICredentialsStore<ICollection<CredentialGroup>> store) {
+        public PasswordSafe(ICredentialsStore<ICollection<CredentialGroup>> store) {
             _store = store;
             _currentData = new List<CredentialGroup>();
         }

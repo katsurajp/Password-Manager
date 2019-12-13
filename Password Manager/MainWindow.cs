@@ -19,7 +19,7 @@ namespace PasswordManagerGUI {
         private ObjectListView _details;
         private string _storeFile;
 
-        private IController _manager;
+        private IPasswordSage _manager;
 
         public MainWindow() : base() {
             ColorScheme = Settings.Default.ColorScheme;
@@ -137,8 +137,8 @@ namespace PasswordManagerGUI {
             ICrypt aesCrypt = new AesCrypt(aesKey, aesIV);
             ICrypt byteShift = new ByteShifter(4190, "vmqup4amöovcb86mnoöbsaen");
             ICredentialsStore<ICollection<CredentialGroup>> store = new CredentialFileStore(_storeFile, new [] { aesCrypt, byteShift });
-            _manager = new Controller(store);
-            ((Controller)_manager).OnCommandExecuted += MainWindow_OnCommandExecuted;
+            _manager = new PasswordSafe(store);
+            ((PasswordSafe)_manager).OnCommandExecuted += MainWindow_OnCommandExecuted;
         }
 
         private void MainWindow_OnCommandExecuted(object sender, EventArgs e) {
