@@ -460,7 +460,6 @@ namespace PasswordManagerGUI {
                 RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
 
                 Application.EnableVisualStyles();
-                MenuBar.Renderer = new ToolStripProfessionalRenderer(new DarkSchemeMenuStripColorTable());
                 MenuBar.ForeColor = Color.Black;
                 foreach (var item in MenuBar.Items) {
                     var dropDown = (ToolStripMenuItem)item;
