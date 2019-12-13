@@ -17,10 +17,7 @@ namespace PasswordManagerGUI {
         public CredentialsEditor(IPasswordSage passwordManager, Credential credential) {
             InitializeComponent();
             DoMagic();
-            Strength.Visible = false;
-
-            _passwordAnalyzer = new StandardPasswordAnalyzer();
-            _passwordManager = passwordManager;
+            SetInstance(passwordManager);
 
             EditedCredential = credential;
             _credential = (Credential)credential.Clone();
@@ -30,22 +27,26 @@ namespace PasswordManagerGUI {
             tbUsername.Text = _credential.Username;
             tbPassword.Text = _credential.Password;
             tbNotes.Text = _credential.Notes;
-
-            AcceptButton = null;
         }
 
         public CredentialsEditor(IPasswordSage passwordManager, CredentialGroup credentialGroup) {
             InitializeComponent();
             DoMagic();
-            Strength.Visible = false;
-
-            _passwordAnalyzer = new StandardPasswordAnalyzer();
-            _passwordManager = passwordManager;
+            SetInstance(passwordManager);
 
             _credential = new Credential();
             _credentialGroup = credentialGroup;
+        }
 
+        private void SetInstance(IPasswordSage passwordManager) {
+            _passwordAnalyzer = new StandardPasswordAnalyzer();
+            _passwordManager = passwordManager;
+
+            Strength.Visible = false;
             AcceptButton = null;
+
+            if (ColorScheme == WindowColorSchemes.Dark)
+                Strength.BackColor = Color.FromArgb(0, 176, 69);
         }
 
         private void BtnTogglePassword_Click(object sender, System.EventArgs e) {
