@@ -20,7 +20,7 @@ namespace PasswordManagerGUI {
 
         public bool IsMainWindow { get; set; } = false;
 
-        public static WindowColorThemes ColorScheme { get; set; }
+        public static WindowColorSchemes ColorScheme { get; set; }
 
         public AwesomeFramelessForm() {
             ContentContainer = new Panel();
@@ -109,56 +109,65 @@ namespace PasswordManagerGUI {
             ButtonExit.FlatStyle = ButtonMinimize.FlatStyle;
             ButtonExit.FlatAppearance.BorderSize = ButtonMinimize.FlatAppearance.BorderSize;
 
-            if (ColorScheme == WindowColorThemes.Default) {
-                ButtonMinimize.ForeColor = Color.Black;
-                ContentContainer.BackColor = Color.FromArgb(187, 208, 233);
-                BorderColor = Color.DarkBlue;
-            }
-            else if (ColorScheme == WindowColorThemes.Dark) {
-                if (!IsMainWindow)
-                    ContentContainer.BackColor = Color.FromArgb(27, 27, 28);
-                else
-                    ContentContainer.BackColor = Color.FromArgb(46, 45, 48);
-
-                foreach (Control control in ContentContainer.Controls) {
-                    if (control.GetType() == typeof(Label)) {
-                        ((Label)control).ForeColor = Color.LightGray;
-                    }
-                    else if (control.GetType() == typeof(TextBox)) {
-                        control.BackColor = Color.FromArgb(52, 51, 54);
-                        ((TextBox)control).BorderStyle = BorderStyle.FixedSingle;
-                        ((TextBox)control).Font = new Font("Verdana", 9);
-                        ((TextBox)control).ForeColor = Color.LightGray;
-                    }
-                    else if (control.GetType() == typeof(Button)) {
-                        ((Button)control).FlatStyle = FlatStyle.Flat;
-                        if (this.AcceptButton == (Button)control) {
-                            control.BackColor = Color.FromArgb(255, 107, 31);
-                            ((Button)control).ForeColor = Color.FromArgb(10, 10, 10);
-                        }
-                        else {
-                            ((Button)control).BackColor = Color.FromArgb(51, 51, 51);
-                            ((Button)control).ForeColor = Color.FromArgb(140, 140, 140);
-                        }
-                    }
-                    else if(control.GetType() == typeof(NumericUpDown)) {
-                        control.BackColor = Color.FromArgb(52, 51, 54);
-                        ((NumericUpDown)control).ForeColor = Color.LightGray;
-                    }
-                }
-
-                ButtonMinimize.ForeColor = Color.LightGray;
-                ContentContainer.ForeColor = Color.LightGray;
-
-                BorderColor = Color.FromArgb(10, 10, 10);
-                ContentContainer.Update();
-            }
+            if (ColorScheme == WindowColorSchemes.Light)
+                SetLightColorScheme();
+            else if (ColorScheme == WindowColorSchemes.Dark)
+                SetDarkColorScheme();
 
             ButtonMinimize.BackColor = ContentContainer.BackColor;
             ButtonMaximize.BackColor = ButtonMinimize.BackColor;
             ButtonExit.BackColor = ButtonMinimize.BackColor;
             ButtonMaximize.ForeColor = ButtonMinimize.ForeColor;
             ButtonExit.ForeColor = ButtonMinimize.ForeColor;
+        }
+
+        private void SetDarkColorScheme() {
+            if (!IsMainWindow)
+                ContentContainer.BackColor = Color.FromArgb(27, 27, 28);
+            else
+                ContentContainer.BackColor = Color.FromArgb(46, 45, 48);
+
+            foreach (Control control in ContentContainer.Controls) {
+                if (control.GetType() == typeof(Label)) {
+                    ((Label)control).ForeColor = Color.LightGray;
+                }
+                else if (control.GetType() == typeof(TextBox)) {
+                    control.BackColor = Color.FromArgb(52, 51, 54);
+                    ((TextBox)control).BorderStyle = BorderStyle.FixedSingle;
+                    ((TextBox)control).Font = new Font("Verdana", 9);
+                    ((TextBox)control).ForeColor = Color.LightGray;
+                }
+                else if (control.GetType() == typeof(Button)) {
+                    ((Button)control).FlatStyle = FlatStyle.Flat;
+                    if (this.AcceptButton == (Button)control) {
+                        control.BackColor = Color.FromArgb(255, 107, 31);
+                        ((Button)control).ForeColor = Color.FromArgb(10, 10, 10);
+                    }
+                    else {
+                        ((Button)control).BackColor = Color.FromArgb(51, 51, 51);
+                        ((Button)control).ForeColor = Color.FromArgb(140, 140, 140);
+                    }
+                }
+                else if (control.GetType() == typeof(NumericUpDown)) {
+                    control.BackColor = Color.FromArgb(52, 51, 54);
+                    ((NumericUpDown)control).ForeColor = Color.LightGray;
+                }
+            }
+
+            ButtonMinimize.ForeColor = Color.LightGray;
+            ContentContainer.ForeColor = Color.LightGray;
+
+            BorderColor = Color.FromArgb(10, 10, 10);
+            ContentContainer.Update();
+        }
+
+        private void SetLightColorScheme() {
+            ButtonMinimize.ForeColor = Color.Black;
+            BorderColor = Color.DarkBlue;
+            if (!IsMainWindow)
+                ContentContainer.BackColor = Color.FromArgb(239, 238, 239);
+            else
+                ContentContainer.BackColor = Color.FromArgb(240, 240, 237);
         }
 
         private void AwesomeFramelessForm_Paint(object sender, PaintEventArgs e) {
