@@ -74,6 +74,8 @@ namespace PasswordManagerGUI {
 
         private void ButtonBrowse_Click(object sender, EventArgs e) {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = "orz";
+            saveFileDialog.Filter = "Password Manager File (*.orz)|*.orz";
             DialogResult dialogResult = saveFileDialog.ShowDialog();
 
             if(dialogResult == DialogResult.OK)

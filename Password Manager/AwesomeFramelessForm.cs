@@ -90,8 +90,10 @@ namespace PasswordManagerGUI {
 
             this.ClientSizeChanged += SizeChanged;
 
-            this.MouseDown += MainWindow_MouseDown;
-            ContentContainer.MouseDown += MainWindow_MouseDown;
+            if (string.IsNullOrEmpty(Title)) {
+                this.MouseDown += MainWindow_MouseDown;
+                ContentContainer.MouseDown += MainWindow_MouseDown;
+            }
 
             CenterToScreen();
 
@@ -131,6 +133,7 @@ namespace PasswordManagerGUI {
                 this.Height += 25;
 
                 titlePanel.MouseDown += MainWindow_MouseDown;
+                titleLabel.MouseDown += MainWindow_MouseDown;
 
                 ContentContainer.Controls.Add(titlePanel);
             }
@@ -334,7 +337,6 @@ namespace PasswordManagerGUI {
             this.Controls.Add(this.ContentContainer);
             this.Name = "AwesomeFramelessForm";
             this.ResumeLayout(false);
-
         }
     }
 }

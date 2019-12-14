@@ -402,6 +402,7 @@ namespace PasswordManagerGUI {
             _details.FullRowSelect = true;
             _details.ShowGroups = false;
             _details.UseCustomSelectionColors = true;
+            _details.MultiSelect = false;
 
             _details.AllColumns.Add(new OLVColumn("Name", "Name"));
             OLVColumn urlColumn = new OLVColumn("URL", "URL");
@@ -737,6 +738,8 @@ namespace PasswordManagerGUI {
 
         private void OpenFileDialog() {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = "orz";
+            openFileDialog.Filter = "Password Manager File (*.orz)|*.orz";
             DialogResult result = openFileDialog.ShowDialog();
 
             if (result == DialogResult.OK) {
@@ -769,6 +772,8 @@ namespace PasswordManagerGUI {
 
         private void MenuSaveAs_Click(object sender, EventArgs e) {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog()) {
+                saveFileDialog.DefaultExt = "orz";
+                saveFileDialog.Filter = "Password Manager File (*.orz)|*.orz";
                 DialogResult result = saveFileDialog.ShowDialog();
 
                 if (result == DialogResult.OK) {
