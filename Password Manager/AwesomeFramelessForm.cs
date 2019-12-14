@@ -107,15 +107,19 @@ namespace PasswordManagerGUI {
         private void SetTitle() {
             if (!string.IsNullOrEmpty(Title)) {
                 Panel titlePanel = new Panel();
-                if (ColorScheme == WindowColorSchemes.Light)
-                    titlePanel.BackColor = Color.FromArgb(0, 122, 226);
-                else
-                    titlePanel.BackColor = Color.FromArgb(20, 20, 19);
                 Label titleLabel = new Label() {
                     Text = Title,
-                    Location = new Point(10, 8)
+                    Location = new Point(10, 8),
+                    Width = this.Width - 10
                 };
-                titleLabel.ForeColor = Color.White;
+                if (ColorScheme == WindowColorSchemes.Light) {
+                    titlePanel.BackColor = Color.FromArgb(0, 122, 226);
+                    titleLabel.ForeColor = Color.White;
+                }
+                else {
+                    titlePanel.BackColor = Color.FromArgb(20, 20, 19);
+                    titleLabel.ForeColor = Color.LightGray;
+                }
                 titlePanel.Controls.Add(titleLabel);
                 titlePanel.Dock = DockStyle.Top;
                 titlePanel.Height = 30;

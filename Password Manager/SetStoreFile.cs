@@ -8,12 +8,21 @@ namespace PasswordManagerGUI {
     public partial class SetStoreFile : AwesomeFramelessForm {
         public string Input { get; set; }
 
-        public SetStoreFile() {
+        public string StoreFile { get; set; }
+
+        private bool _isInitialSetup;
+
+        public SetStoreFile(bool isInitialSetup) {
             InitializeComponent();
+            _isInitialSetup = isInitialSetup;
             DoMagic();
             TbMasterPassword.Select();
 
             InputStoreFile.Text = $"{new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName}\\D6qA5QN31w.dat";
+
+            if(!isInitialSetup) {
+                btnCancel.Text = "Abbrechen";
+            }
         }
 
         private void BtnShowPassword_Click(object sender, EventArgs e) {
@@ -22,7 +31,10 @@ namespace PasswordManagerGUI {
         }
 
         private void BtnCancel_Click(object sender, EventArgs e) {
-            DialogResult = DialogResult.Cancel;
+            if (_isInitialSetup)
+                DialogResult = DialogResult.Abort;
+            else
+                DialogResult = DialogResult.Cancel;
         }
 
         private void ButtonOk_Click(object sender, EventArgs e) {
@@ -49,20 +61,23 @@ namespace PasswordManagerGUI {
             //    return;
             //}
 
-            Settings.Default.StoreFile = InputStoreFile.Text;
-            Settings.Default.Save();
-
+            StoreFile = InputStoreFile.Text;
             Input = password;
+
+            if (_isInitialSetup) {
+                Settings.Default.StoreFile = StoreFile;
+                Settings.Default.Save();
+            }
 
             DialogResult = DialogResult.OK;
         }
 
         private void ButtonBrowse_Click(object sender, EventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            DialogResult dialogResult = openFileDialog.ShowDialog();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            DialogResult dialogResult = saveFileDialog.ShowDialog();
 
             if(dialogResult == DialogResult.OK)
-                InputStoreFile.Text = openFileDialog.FileName;
+                InputStoreFile.Text = saveFileDialog.FileName;
         }
     }
 }

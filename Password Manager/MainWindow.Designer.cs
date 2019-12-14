@@ -41,6 +41,7 @@
             this.MenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.extrasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuNew = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -149,6 +150,7 @@
             // dateiToolStripMenuItem
             // 
             this.dateiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuNew,
             this.MenuOpen,
             this.speichernUnterToolStripMenuItem,
             this.MenuSave,
@@ -208,9 +210,16 @@
             // MenuOptions
             // 
             this.MenuOptions.Name = "MenuOptions";
-            this.MenuOptions.Size = new System.Drawing.Size(180, 22);
+            this.MenuOptions.Size = new System.Drawing.Size(124, 22);
             this.MenuOptions.Text = "Optionen";
             this.MenuOptions.Click += new System.EventHandler(this.MenuOptions_Click);
+            // 
+            // MenuNew
+            // 
+            this.MenuNew.Name = "MenuNew";
+            this.MenuNew.Size = new System.Drawing.Size(180, 22);
+            this.MenuNew.Text = "Neu";
+            this.MenuNew.Click += new System.EventHandler(this.MenuNew_Click);
             // 
             // MainWindow
             // 
@@ -259,5 +268,6 @@
         private System.Windows.Forms.ToolStripMenuItem MenuExit;
         private System.Windows.Forms.ToolStripMenuItem extrasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MenuOptions;
+        private System.Windows.Forms.ToolStripMenuItem MenuNew;
     }
 }

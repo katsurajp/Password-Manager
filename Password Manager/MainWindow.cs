@@ -41,14 +41,14 @@ namespace PasswordManagerGUI {
 
             if (!File.Exists(_storeFile)) {
                 if(string.IsNullOrEmpty(Settings.Default.StoreFile)) {
-                    CreateNewStoreFileInstance();
+                    CreateNewStoreFileInstance(true);
                     _storeFile = Settings.Default.StoreFile;
                 }
                 else {
                     StoreFileNotFoundDialog dialog = new StoreFileNotFoundDialog();
                     DialogResult result = dialog.ShowDialog();
                     if (result == DialogResult.Yes)
-                        CreateNewStoreFileInstance();
+                        CreateNewStoreFileInstance(true);
                     else if (result == DialogResult.No)
                         OpenFileDialog();
                     else
@@ -78,31 +78,41 @@ namespace PasswordManagerGUI {
         }
 
         private void BindGroups(ICollection<CredentialGroup> groups) {
-            if (groups.Count > 0) {
-                Groups.Items.Clear();
+            Groups.Items.Clear();
 
-                IEnumerable<CredentialGroup> source = groups.OrderBy(g => g.Name);
+            IEnumerable<CredentialGroup> source = groups.OrderBy(g => g.Name);
 
-                source.ToList().ForEach(g => {
-                    Groups.Items.Add(g.Name);
-                });
+            source.ToList().ForEach(g => {
+                Groups.Items.Add(g.Name);
+            });
 
+
+            if (groups.Count > 0)
                 Groups.SelectedIndex = 0;
-                BindDetails(groups.First());
-            }
+
+            BindDetails(groups.FirstOrDefault());
         }
 
-        private void CreateNewStoreFileInstance() {
-            SetStoreFile newStoreFileDialog = new SetStoreFile();
+        private bool CreateNewStoreFileInstance(bool isInitialSetup) {
+            SetStoreFile newStoreFileDialog = new SetStoreFile(isInitialSetup);
             DialogResult result = newStoreFileDialog.ShowDialog();
 
             if(result == DialogResult.OK) {
+                _storeFile = newStoreFileDialog.StoreFile;
                 GetAESKeyAndIV(newStoreFileDialog.Input, out byte[] key, out byte[] iv);
                 CreatePasswordManagerInstance(key, iv);
+
+                return true;
+            }
+            else if(result == DialogResult.Cancel) {
+                newStoreFileDialog.Close();
+                newStoreFileDialog.Dispose();
             }
             else {
                 Exit();
             }
+
+            return false;
         }
 
         private void LoadSavedPasswords() {
@@ -714,6 +724,13 @@ namespace PasswordManagerGUI {
             Environment.Exit(1);
         }
 
+        private void MenuNew_Click(object sender, EventArgs e) {
+            if (CreateNewStoreFileInstance(false)) {
+                _manager.Save();
+                LoadSavedPasswords();
+            }
+        }
+
         private void MenuOpen_Click(object sender, EventArgs e) {
             OpenFileDialog();
         }
@@ -724,9 +741,16 @@ namespace PasswordManagerGUI {
 
             if (result == DialogResult.OK) {
                 _storeFile = openFileDialog.FileName;
+
                 LoadSavedPasswords();
-                Settings.Default.StoreFile = _storeFile;
-                Settings.Default.Save();
+
+                if (MessageBox.Show(
+                    "Soll diese Datei ab sofort beim Starten des Programms immer geöffnet werden?",
+                    "Neue Standard-Datei?",
+                    MessageBoxButtons.YesNo) == DialogResult.Yes) {
+                    Settings.Default.StoreFile = _storeFile;
+                    Settings.Default.Save();
+                }
             }
         }
 
