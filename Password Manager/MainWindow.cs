@@ -19,7 +19,7 @@ namespace PasswordManagerGUI {
         private ObjectListView _details;
         private string _storeFile;
 
-        private IPasswordSage _manager;
+        private IPasswordSafe _manager;
 
         public MainWindow() : base() {
             ColorScheme = Settings.Default.ColorScheme;
@@ -86,7 +86,6 @@ namespace PasswordManagerGUI {
                 Groups.Items.Add(g.Name);
             });
 
-
             if (groups.Count > 0)
                 Groups.SelectedIndex = 0;
 
@@ -133,7 +132,6 @@ namespace PasswordManagerGUI {
                         success = true;
                     }
                     catch {
-                        MessageBox.Show("Passwort nicht korrekt.");
                         prompt.Close();
                     }
                 }
@@ -230,9 +228,13 @@ namespace PasswordManagerGUI {
         }
 
         private void RenameGroup_Click(object sender, System.EventArgs e) {
+            EditGroup();
+        }
+
+        private void EditGroup() {
             CredentialGroup toEdit = GetSelectedGroup();
 
-            if(toEdit != null) {
+            if (toEdit != null) {
                 EditGroupDialog editDialog = new EditGroupDialog(_manager, toEdit);
                 DialogResult result = editDialog.ShowDialog();
 
@@ -312,7 +314,9 @@ namespace PasswordManagerGUI {
             _details.SelectedItem = null;
             _details.Objects = null;
 
-            if(group != null) {
+            _details.ItemSelectionChanged += _details_ItemSelectionChanged;
+
+            if (group != null) {
                 group.Credentials.ToList().ForEach(i => {
                     _details.AddObject(i);
                 });
@@ -323,6 +327,56 @@ namespace PasswordManagerGUI {
             _details.AutoResizeColumns();
         }
 
+        private void _details_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e) {
+            if(e.IsSelected) {
+                MenuItem detailsItem = new MenuItem("Anzeigen");
+                detailsItem.Click += DetailsItem_Click;
+
+                MenuItem moveParentItem = new MenuItem("Verschieben...");
+                foreach (string g in Groups.Items) {
+                    MenuItem moveItem = new MenuItem(g);
+                    moveItem.Click += MoveItem_Click;
+                    moveParentItem.MenuItems.Add(moveItem);
+                }
+
+                MenuItem deleteItem = new MenuItem("Löschen");
+                deleteItem.Click += DeleteItem_Click;
+
+                MenuItem duplicateItem = new MenuItem("Duplizieren");
+                duplicateItem.Click += DuplicateItem_Click;
+
+                MenuItem[] menuItems = new[] { detailsItem, moveParentItem, deleteItem, duplicateItem };
+
+                _details.ContextMenu = new ContextMenu(menuItems);
+            }
+            else {
+                _details.ContextMenu = null;
+            }
+        }
+
+        private void DetailsItem_Click(object sender, EventArgs e) {
+            EditCredential(GetSelectedGroup(), GetSelectedCredential());
+        }
+
+        private void MoveItem_Click(object sender, EventArgs e) {
+            Credential credential = GetSelectedCredential();
+            CredentialGroup sourceGroup = credential.Group;
+            string moveTo = ((MenuItem)sender).Text;
+            CredentialGroup target = _manager.FindGroup(moveTo);
+            _manager.MoveCredential(credential, target);
+
+            BindDetails(sourceGroup);
+        }
+
+        private void DeleteItem_Click(object sender, EventArgs e) {
+            RemoveSelectedCredential();
+        }
+
+        private void DuplicateItem_Click(object sender, EventArgs e) {
+            Credential duplicate = _manager.DuplicateCredential(GetSelectedCredential());
+            BindDetails(GetSelectedGroup());
+        }
+
         private void SpeichernToolStripMenuItem_Click(object sender, System.EventArgs e) {
             SavePasswords();
         }
@@ -331,7 +385,37 @@ namespace PasswordManagerGUI {
             _ribbon.Tabs.First().Panels.Find(p => p.Name == "Groups").Items.Where(i => new[] { "RenameGroup", "RemoveGroup" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
             _ribbon.Tabs.First().Panels.Find(p => p.Name == "Credentials").Items.Where(i => new[] { "AddCredential" }.Contains(i.Name)).ToList().ForEach(i => i.Enabled = Groups.SelectedItem != null);
 
+            ListBox listBox = (ListBox)sender;
+            if(listBox.SelectedItem != null) {
+                ContextMenu contextMenu = new ContextMenu();
+
+                MenuItem editGroupItem = new MenuItem("Umbenennen");
+                editGroupItem.Click += MenuItem_Click;
+
+                MenuItem deleteGroupItem = new MenuItem("Löschen");
+                deleteGroupItem.Click += DeleteGroupItem_Click;
+
+                contextMenu.MenuItems.AddRange(new[] { editGroupItem, deleteGroupItem });
+
+                listBox.ContextMenu = contextMenu;
+            }
+            else {
+                listBox.ContextMenu = null;
+            }
+
             BindDetails(GetSelectedGroup());
+        }
+
+        private void Groups_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
+            ((ListBox)sender).SelectedIndex = ((ListBox)sender).IndexFromPoint(e.X, e.Y);
+        }
+
+        private void MenuItem_Click(object sender, EventArgs e) {
+            EditGroup();
+        }
+
+        private void DeleteGroupItem_Click(object sender, EventArgs e) {
+            RemoveSelectedGroup();
         }
 
         private void _details_SelectedIndexChanged(object sender, System.EventArgs e) {
@@ -544,7 +628,7 @@ namespace PasswordManagerGUI {
             RibbonTab tab = new RibbonTab();
             RibbonPanel panel = new RibbonPanel("Funktionen");
             panel.Name = "Functions";
-            RibbonItem save = new RibbonButton("Speichern");
+            RibbonButton save = new RibbonButton("Speichern");
             save.ToolTip = "Speichern (Strg + s)";
             save.Name = "Save";
             save.Image = Resources.save;

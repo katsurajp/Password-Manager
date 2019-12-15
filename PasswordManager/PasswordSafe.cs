@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Password_Manager {
-    public class PasswordSafe : IPasswordSage {
+    public class PasswordSafe : IPasswordSafe {
         private List<CredentialGroup> _currentData;
 
         private readonly ICredentialsStore<ICollection<CredentialGroup>> _store;
@@ -123,6 +123,37 @@ namespace Password_Manager {
             ExecuteCommand(command);
         }
 
+        public void MoveCredential(Credential credential, CredentialGroup targetGroup) {
+            if (credential == null)
+                throw new InvalidOperationException("Keine Credentials ausgewählt.");
+            if (targetGroup == null)
+                throw new InvalidOperationException("Zielgruppe nicht angegeben.");
+
+            ICommand command = new MoveCredentialCommand() {
+                Credential = credential,
+                TargetGroup = targetGroup
+            };
+
+            ExecuteCommand(command);
+        }
+
+        public Credential DuplicateCredential(Credential credential) {
+            if(credential == null)
+                throw new InvalidOperationException("Keine Credentials ausgewählt.");
+
+            Credential duplicate = (Credential)credential.Clone();
+            RenameCopy(duplicate);
+
+            ICommand command = new AddCredentialCommand() {
+                CredentialToCreate = duplicate,
+                Group = duplicate.Group
+            };
+
+            ExecuteCommand(command);
+
+            return duplicate;
+        }
+
         public void Undo() {
             if (CommandProcessor.CanUndo)
                 CommandProcessor.Undo();
@@ -149,6 +180,21 @@ namespace Password_Manager {
 
         public void ChangeStoreFile(string absolutePath) {
             _store.SetStoreFile(absolutePath);
+        }
+
+        private void RenameCopy(Credential credential) {
+            bool success = false;
+            string newName;
+            int copyNumber = 1;
+
+            while (!success) {
+                newName = $"{credential.Name} - Kopie({copyNumber})";
+                if (!credential.Group.Credentials.Any(c => c.Name == newName)) {
+                    credential.Name = newName;
+                    success = true;
+                }
+                copyNumber++;
+            }
         }
 
         private object ExecuteCommand(ICommand command) {

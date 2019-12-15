@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace PasswordManagerGUI {
     public partial class EditGroupDialog : AwesomeFramelessForm {
-        private IPasswordSage _passwordManager;
+        private IPasswordSafe _passwordManager;
         private CredentialGroup _group { get; set; }
 
         public CredentialGroup EditedGroup { get; set; }
 
-        public EditGroupDialog(IPasswordSage passwordManager, CredentialGroup group) {
+        public EditGroupDialog(IPasswordSafe passwordManager, CredentialGroup group) {
             InitializeComponent();
             DoMagic();
             _passwordManager = passwordManager;
@@ -20,7 +20,7 @@ namespace PasswordManagerGUI {
             tbGroupName.Text = _group.Name;
         }
 
-        public EditGroupDialog(IPasswordSage passwordManager) {
+        public EditGroupDialog(IPasswordSafe passwordManager) {
             InitializeComponent();
             DoMagic();
             _passwordManager = passwordManager;

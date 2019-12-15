@@ -119,6 +119,7 @@
             this.Groups.Size = new System.Drawing.Size(261, 485);
             this.Groups.TabIndex = 1;
             this.Groups.SelectedIndexChanged += new System.EventHandler(this.Groups_SelectedIndexChanged);
+            this.Groups.MouseDown += Groups_MouseDown;
             // 
             // DetailsContainer
             // 

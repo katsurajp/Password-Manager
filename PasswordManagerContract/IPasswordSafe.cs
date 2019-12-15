@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Password_Manager.Contract {
-    public interface IPasswordSage {
+    public interface IPasswordSafe {
         bool HasUndoableAction { get; }
 
         bool HasRedoableAction { get; }
@@ -23,6 +23,10 @@ namespace Password_Manager.Contract {
         Credential FindCredentialById(int id);
 
         void RemoveCredential(Credential toBeremoved);
+
+        void MoveCredential(Credential credential, CredentialGroup targetGroup);
+
+        Credential DuplicateCredential(Credential credential);
 
         void Undo();
 
