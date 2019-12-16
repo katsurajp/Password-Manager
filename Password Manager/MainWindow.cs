@@ -339,13 +339,19 @@ namespace PasswordManagerGUI {
                     moveParentItem.MenuItems.Add(moveItem);
                 }
 
+                MenuItem copyUsername = new MenuItem("Benutzernamen kopieren");
+                copyUsername.Click += CopyUsername_Click;
+
+                MenuItem copyPassword = new MenuItem("Passwort kopieren");
+                copyPassword.Click += CopyPassword_Click;
+
                 MenuItem deleteItem = new MenuItem("Löschen");
                 deleteItem.Click += DeleteItem_Click;
 
                 MenuItem duplicateItem = new MenuItem("Duplizieren");
                 duplicateItem.Click += DuplicateItem_Click;
 
-                MenuItem[] menuItems = new[] { detailsItem, moveParentItem, deleteItem, duplicateItem };
+                MenuItem[] menuItems = new[] { detailsItem, new MenuItem("-"), copyUsername, copyPassword, new MenuItem("-"), moveParentItem, deleteItem, duplicateItem };
 
                 _details.ContextMenu = new ContextMenu(menuItems);
             }
@@ -366,6 +372,16 @@ namespace PasswordManagerGUI {
             _manager.MoveCredential(credential, target);
 
             BindDetails(sourceGroup);
+        }
+
+        private void CopyUsername_Click(object sender, EventArgs e) {
+            Credential credential = GetSelectedCredential();
+            Clipboard.SetText(credential.Username);
+        }
+
+        private void CopyPassword_Click(object sender, EventArgs e) {
+            Credential credential = GetSelectedCredential();
+            Clipboard.SetText(credential.Password);
         }
 
         private void DeleteItem_Click(object sender, EventArgs e) {
