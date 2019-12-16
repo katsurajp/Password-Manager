@@ -510,37 +510,43 @@ namespace PasswordManagerGUI {
             _details.HeaderMinimumHeight = 32;
             _details.RebuildColumns();
 
-            if (ColorScheme == WindowColorSchemes.Light) {
-                splitContainer1.BackColor = Color.FromArgb(239, 238, 239);
-                _details.HeaderFormatStyle = new HeaderFormatStyle();
-                _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(206, 206, 217);
-                _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(215, 215, 214);
-                _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
-                _details.BackColor = Color.FromArgb(255, 255, 252);
-                _details.ForeColor = Color.Black;
-                _details.SelectedBackColor = Color.FromArgb(0, 122, 226);
-                _details.SelectedForeColor = Color.White;
-                _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(4, 145, 193);
-                _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
-                _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
-            }
-            if(ColorScheme == WindowColorSchemes.Dark) {
-                splitContainer1.BackColor = Color.FromArgb(32, 36, 42);
-                _details.HeaderFormatStyle = new HeaderFormatStyle();
-                _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(52, 51, 54);
-                _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(64, 63, 69);
-                _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
-                _details.BackColor = Color.FromArgb(30, 30, 30);
-                _details.ForeColor = Color.LightGray;
-                _details.SelectedBackColor = Color.FromArgb(0, 122, 226);
-                _details.SelectedForeColor = Color.White;
-                _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(255, 107, 31);
-                _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
-                _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
-            }
+            if (ColorScheme == WindowColorSchemes.Light)
+                SetDetailsSchemeLight();
+            else if (ColorScheme == WindowColorSchemes.Dark)
+                SetDetailsSchemeDark();
 
             DetailsContainer.BackColor = _details.BackColor;
             panel2.BackColor = _details.BackColor;
+        }
+
+        private void SetDetailsSchemeLight() {
+            splitContainer1.BackColor = Color.FromArgb(239, 238, 239);
+            _details.HeaderFormatStyle = new HeaderFormatStyle();
+            _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(206, 206, 217);
+            _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(215, 215, 214);
+            _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
+            _details.BackColor = Color.FromArgb(255, 255, 252);
+            _details.ForeColor = Color.Black;
+            _details.SelectedBackColor = Color.FromArgb(0, 122, 226);
+            _details.SelectedForeColor = Color.White;
+            _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(4, 145, 193);
+            _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
+            _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
+        }
+
+        private void SetDetailsSchemeDark() {
+            splitContainer1.BackColor = Color.FromArgb(32, 36, 42);
+            _details.HeaderFormatStyle = new HeaderFormatStyle();
+            _details.HeaderFormatStyle.Normal.BackColor = Color.FromArgb(52, 51, 54);
+            _details.HeaderFormatStyle.Hot.BackColor = Color.FromArgb(64, 63, 69);
+            _details.HeaderFormatStyle.Pressed = _details.HeaderFormatStyle.Hot;
+            _details.BackColor = Color.FromArgb(30, 30, 30);
+            _details.ForeColor = Color.LightGray;
+            _details.SelectedBackColor = Color.FromArgb(0, 122, 226);
+            _details.SelectedForeColor = Color.White;
+            _details.HyperlinkStyle.Normal.ForeColor = Color.FromArgb(255, 107, 31);
+            _details.HyperlinkStyle.Over = _details.HyperlinkStyle.Normal;
+            _details.HyperlinkStyle.Visited = _details.HyperlinkStyle.Normal;
         }
 
         private void SetRibbonBar() {
@@ -551,75 +557,10 @@ namespace PasswordManagerGUI {
 
             Groups.DrawMode = DrawMode.OwnerDrawFixed;
 
-            if (ColorScheme == WindowColorSchemes.Light) {
-                RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
-
-                Application.EnableVisualStyles();
-                MenuBar.ForeColor = Color.Black;
-                foreach (var item in MenuBar.Items) {
-                    var dropDown = (ToolStripMenuItem)item;
-                    foreach (var dropDownItem in dropDown.DropDownItems) {
-                        if (dropDownItem.GetType() == typeof(ToolStripMenuItem))
-                            ((ToolStripMenuItem)dropDownItem).ForeColor = Color.Black;
-                    }
-                }
-
-                Groups.BackColor = Color.FromArgb(245, 245, 242);
-                Groups.ForeColor = Color.Black;
-
-                Groups.DrawItem += Groups_DrawItemLightColorScheme;
-
-                foreach (FieldInfo field in colors.GetType().GetFields()) {
-                    var type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
-                    if (type == typeof(Color)) {
-                        if (field.Name.ToLower().Contains("buttonchecked") || field.Name.ToLower().Contains("buttonselected"))
-                            field.SetValue(colors, Color.FromArgb(196, 222, 247));
-                        else if (field.Name.ToLower().Contains("text") && !field.Name.ToLower().Contains("textbackground"))
-                            field.SetValue(colors, Color.Black);
-                        else if (field.Name.ToLower().Contains("paneltextbackground"))
-                            field.SetValue(colors, Color.FromArgb(206, 206, 217));
-                        else
-                            field.SetValue(colors, Color.FromArgb(239, 238, 239));
-                    }
-                }
-
-                _ribbon.Theme.RendererColorTable = colors;
-            }
-            else if (ColorScheme == WindowColorSchemes.Dark) {
-                RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
-
-                Application.EnableVisualStyles();
-                MenuBar.Renderer = new ToolStripProfessionalRenderer(new DarkSchemeMenuStripColorTable());
-                MenuBar.ForeColor = Color.LightGray;
-                foreach(var item in MenuBar.Items) {
-                    var dropDown = (ToolStripMenuItem)item;
-                    foreach(var dropDownItem in dropDown.DropDownItems) {
-                        if (dropDownItem.GetType() == typeof(ToolStripMenuItem))
-                            ((ToolStripMenuItem)dropDownItem).ForeColor = Color.LightGray;
-                    }
-                }
-
-                Groups.BackColor = Color.FromArgb(37, 37, 38);
-                Groups.ForeColor = Color.LightGray;
-
-                Groups.DrawItem += Groups_DrawItemDarkColorScheme;
-
-                foreach (FieldInfo field in colors.GetType().GetFields()) {
-                    var type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
-                    if (type == typeof(Color)) {
-                        if (field.Name.ToLower().Contains("buttonchecked") || field.Name.ToLower().Contains("buttonselected"))
-                            field.SetValue(colors, Color.FromArgb(62, 62, 63));
-                        else if (field.Name.ToLower().Contains("text") && !field.Name.ToLower().Contains("textbackground"))
-                            field.SetValue(colors, Color.LightGray);
-                        else if (field.Name.ToLower().Contains("paneltextbackground"))
-                            field.SetValue(colors, Color.FromArgb(52, 51, 54));
-                        else
-                            field.SetValue(colors, Color.FromArgb(46, 45, 48));
-                    }
-                }
-
-                _ribbon.Theme.RendererColorTable = colors;
-            }
+            if (ColorScheme == WindowColorSchemes.Light)
+                SetRibbonColorSchemeLight();
+            else if (ColorScheme == WindowColorSchemes.Dark)
+                SetRibbonColorSchemeDark();
 
             MenuBar.BackColor = ContentContainer.BackColor;
 
@@ -701,6 +642,88 @@ namespace PasswordManagerGUI {
             _ribbon.Tabs.Add(tab);
 
             RibbonContainer.Controls.Add(_ribbon);
+        }
+
+        private void SetRibbonColorSchemeLight() {
+            RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
+
+            Application.EnableVisualStyles();
+            MenuBar.ForeColor = Color.Black;
+            foreach (var item in MenuBar.Items) {
+                var dropDown = (ToolStripMenuItem)item;
+                foreach (var dropDownItem in dropDown.DropDownItems) {
+                    if (dropDownItem.GetType() == typeof(ToolStripMenuItem))
+                        ((ToolStripMenuItem)dropDownItem).ForeColor = Color.Black;
+                }
+            }
+
+            Groups.BackColor = Color.FromArgb(245, 245, 242);
+            Groups.ForeColor = Color.Black;
+
+            Groups.DrawItem += Groups_DrawItemLightColorScheme;
+
+            foreach (FieldInfo field in colors.GetType().GetFields()) {
+                var type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
+                if (type == typeof(Color)) {
+                    if (field.Name.ToLower().Contains("buttonchecked") || field.Name.ToLower().Contains("buttonselected"))
+                        field.SetValue(colors, Color.FromArgb(196, 222, 247));
+                    else if (field.Name.ToLower().Contains("text") && !field.Name.ToLower().Contains("textbackground"))
+                        field.SetValue(colors, Color.Black);
+                    else if (field.Name.ToLower().Contains("paneltextbackground"))
+                        field.SetValue(colors, Color.FromArgb(206, 206, 217));
+                    else
+                        field.SetValue(colors, Color.FromArgb(239, 238, 239));
+                }
+            }
+
+            _ribbon.Theme.RendererColorTable = colors;
+        }
+
+        private void SetRibbonColorSchemeDark() {
+            Color groupsBackColor = Color.FromArgb(37, 37, 38);
+            Color groupsForeColor = Color.LightGray;
+            Color buttonColor = Color.FromArgb(62, 62, 63);
+            Color textColor = Color.LightGray;
+            Color panelTextBackground = Color.FromArgb(52, 51, 54);
+            Color colorEverythingElse = Color.FromArgb(46, 45, 48);
+
+            SetRibbonColorSchemeColors(groupsBackColor, groupsForeColor, buttonColor, textColor, panelTextBackground, colorEverythingElse);
+        }
+
+        private void SetRibbonColorSchemeColors(Color groupsBackColor, Color groupsForeColor, Color buttonColor, Color textColor, Color panelTextBackground, Color colorEverythingElse) {
+            RibbonProfesionalRendererColorTable colors = new RibbonProfesionalRendererColorTable();
+
+            Application.EnableVisualStyles();
+            MenuBar.Renderer = new ToolStripProfessionalRenderer(new DarkSchemeMenuStripColorTable());
+            MenuBar.ForeColor = Color.LightGray;
+            foreach (var item in MenuBar.Items) {
+                var dropDown = (ToolStripMenuItem)item;
+                foreach (var dropDownItem in dropDown.DropDownItems) {
+                    if (dropDownItem.GetType() == typeof(ToolStripMenuItem))
+                        ((ToolStripMenuItem)dropDownItem).ForeColor = Color.LightGray;
+                }
+            }
+
+            Groups.BackColor = groupsBackColor;
+            Groups.ForeColor = groupsForeColor;
+
+            Groups.DrawItem += Groups_DrawItemDarkColorScheme;
+
+            foreach (FieldInfo field in colors.GetType().GetFields()) {
+                var type = Nullable.GetUnderlyingType(field.FieldType) ?? field.FieldType;
+                if (type == typeof(Color)) {
+                    if (field.Name.ToLower().Contains("buttonchecked") || field.Name.ToLower().Contains("buttonselected"))
+                        field.SetValue(colors, buttonColor);
+                    else if (field.Name.ToLower().Contains("text") && !field.Name.ToLower().Contains("textbackground"))
+                        field.SetValue(colors, textColor);
+                    else if (field.Name.ToLower().Contains("paneltextbackground"))
+                        field.SetValue(colors, panelTextBackground);
+                    else
+                        field.SetValue(colors, colorEverythingElse);
+                }
+            }
+
+            _ribbon.Theme.RendererColorTable = colors;
         }
 
         private void Groups_DrawItemDarkColorScheme(object sender, DrawItemEventArgs e) {

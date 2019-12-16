@@ -118,7 +118,7 @@ namespace PasswordManagerGUI {
                     titlePanel.BackColor = Color.FromArgb(0, 122, 226);
                     titleLabel.ForeColor = Color.White;
                 }
-                else {
+                else if(ColorScheme == WindowColorSchemes.Dark) {
                     titlePanel.BackColor = Color.FromArgb(20, 20, 19);
                     titleLabel.ForeColor = Color.LightGray;
                 }
@@ -159,6 +159,15 @@ namespace PasswordManagerGUI {
             ButtonExit.ForeColor = ButtonMinimize.ForeColor;
         }
 
+        private void SetLightColorScheme() {
+            ButtonMinimize.ForeColor = Color.Black;
+            BorderColor = Color.FromArgb(0, 122, 226);
+            if (!IsMainWindow)
+                ContentContainer.BackColor = Color.FromArgb(239, 238, 239);
+            else
+                ContentContainer.BackColor = Color.FromArgb(240, 240, 237);
+        }
+
         private void SetDarkColorScheme() {
             if (!IsMainWindow)
                 ContentContainer.BackColor = Color.FromArgb(27, 27, 28);
@@ -190,7 +199,7 @@ namespace PasswordManagerGUI {
                     control.BackColor = Color.FromArgb(52, 51, 54);
                     ((NumericUpDown)control).ForeColor = Color.LightGray;
                 }
-                else if(control.GetType() == typeof(GroupBox)) {
+                else if (control.GetType() == typeof(GroupBox)) {
                     control.ForeColor = Color.LightGray;
                 }
             }
@@ -200,15 +209,6 @@ namespace PasswordManagerGUI {
 
             BorderColor = Color.FromArgb(10, 10, 10);
             ContentContainer.Update();
-        }
-
-        private void SetLightColorScheme() {
-            ButtonMinimize.ForeColor = Color.Black;
-            BorderColor = Color.FromArgb(0, 122, 226);
-            if (!IsMainWindow)
-                ContentContainer.BackColor = Color.FromArgb(239, 238, 239);
-            else
-                ContentContainer.BackColor = Color.FromArgb(240, 240, 237);
         }
 
         private void AwesomeFramelessForm_Paint(object sender, PaintEventArgs e) {
